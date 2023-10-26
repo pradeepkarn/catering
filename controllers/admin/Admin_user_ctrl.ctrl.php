@@ -129,8 +129,8 @@ class Admin_user_ctrl
 
 
         $data['image'] = $_FILES['image']??null;
-        $data['vhcl_doc'] = $_FILES['vhcl_doc']??null;
-        $data['dl_doc'] = $_FILES['dl_doc']??null;
+        // $data['vhcl_doc'] = $_FILES['vhcl_doc']??null;
+        // $data['dl_doc'] = $_FILES['dl_doc']??null;
         $data['nid_doc'] = $_FILES['nid_doc']??null;
 
         $rules = [
@@ -142,12 +142,12 @@ class Admin_user_ctrl
         ];
         if ($req->ug == 'driver') {
             $rules_driver = [
-                'dl_doc' => 'required|file',
+                // 'dl_doc' => 'required|file',
                 'nid_doc' => 'required|file',
-                'vhcl_doc' => 'required|file',
-                'dl_no' => 'required|string',
+                // 'vhcl_doc' => 'required|file',
+                // 'dl_no' => 'required|string',
                 'nid_no' => 'required|string',
-                'vhcl_no' => 'required|string',
+                // 'vhcl_no' => 'required|string',
             ];
             $rules = array_merge($rules, $rules_driver);
         }
@@ -180,8 +180,8 @@ class Admin_user_ctrl
             $arr['first_name'] = sanitize_remove_tags($request->first_name);
             $arr['last_name'] = sanitize_remove_tags($request->last_name);
             $arr['nid_no'] = sanitize_remove_tags($request->nid_no);
-            $arr['dl_no'] = sanitize_remove_tags($request->dl_no);
-            $arr['vhcl_no'] = sanitize_remove_tags($request->vhcl_no);
+            // $arr['dl_no'] = sanitize_remove_tags($request->dl_no);
+            // $arr['vhcl_no'] = sanitize_remove_tags($request->vhcl_no);
             $arr['password'] = md5($request->password);
             if (isset($request->bio)) {
                 $arr['bio'] = sanitize_remove_tags($request->bio);
@@ -209,26 +209,26 @@ class Admin_user_ctrl
                     }
                     
                 }
-                if (isset($request->dl_doc)) {
-                    $ext = pathinfo($request->dl_doc['name'], PATHINFO_EXTENSION);
-                    $docname = str_replace(" ", "_", getUrlSafeString($request->username)) . uniqid("_") . "." . $ext;
-                    $dir = MEDIA_ROOT . "docs/" . $docname;
-                    $upload = move_uploaded_file($request->dl_doc['tmp_name'], $dir);
-                    if ($upload) {
-                        $filearr['dl_doc'] = $imgname;
-                    }
+                // if (isset($request->dl_doc)) {
+                //     $ext = pathinfo($request->dl_doc['name'], PATHINFO_EXTENSION);
+                //     $docname = str_replace(" ", "_", getUrlSafeString($request->username)) . uniqid("_") . "." . $ext;
+                //     $dir = MEDIA_ROOT . "docs/" . $docname;
+                //     $upload = move_uploaded_file($request->dl_doc['tmp_name'], $dir);
+                //     if ($upload) {
+                //         $filearr['dl_doc'] = $imgname;
+                //     }
                    
-                }
-                if (isset($request->vhcl_doc)) {
-                    $ext = pathinfo($request->vhcl_doc['name'], PATHINFO_EXTENSION);
-                    $docname = str_replace(" ", "_", getUrlSafeString($request->username)) . uniqid("_") . "." . $ext;
-                    $dir = MEDIA_ROOT . "docs/" . $docname;
-                    $upload = move_uploaded_file($request->vhcl_doc['tmp_name'], $dir);
-                    if ($upload) {
-                        $filearr['vhcl_doc'] = $imgname;
-                    }
+                // }
+                // if (isset($request->vhcl_doc)) {
+                //     $ext = pathinfo($request->vhcl_doc['name'], PATHINFO_EXTENSION);
+                //     $docname = str_replace(" ", "_", getUrlSafeString($request->username)) . uniqid("_") . "." . $ext;
+                //     $dir = MEDIA_ROOT . "docs/" . $docname;
+                //     $upload = move_uploaded_file($request->vhcl_doc['tmp_name'], $dir);
+                //     if ($upload) {
+                //         $filearr['vhcl_doc'] = $imgname;
+                //     }
                     
-                }
+                // }
                 if (count($filearr)) {
                     (new Model('pk_user'))->update($postid, $filearr);
                 }
@@ -266,8 +266,8 @@ class Admin_user_ctrl
         }
 
         $data['image'] = $_FILES['image']??null;
-        $data['vhcl_doc'] = $_FILES['vhcl_doc']??null;
-        $data['dl_doc'] = $_FILES['dl_doc']??null;
+        // $data['vhcl_doc'] = $_FILES['vhcl_doc']??null;
+        // $data['dl_doc'] = $_FILES['dl_doc']??null;
         $data['nid_doc'] = $_FILES['nid_doc']??null;
 
         $rules = [
@@ -277,9 +277,9 @@ class Admin_user_ctrl
         ];
         if ($req->ug == 'driver') {
             $rules_driver = [
-                'dl_no' => 'required|string',
+                // 'dl_no' => 'required|string',
                 'nid_no' => 'required|string',
-                'vhcl_no' => 'required|string',
+                // 'vhcl_no' => 'required|string',
             ];
             $rules = array_merge($rules, $rules_driver);
         }

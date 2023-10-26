@@ -100,72 +100,27 @@
     </ul>
   </li>
   <!-- user components -->
-  <li class="nav-item hide">
+  <li class="nav-item">
     <a class="nav-link collapsed" data-bs-target="#components-users" data-bs-toggle="collapse" href="#">
-      <i class="bi bi-menu-button-wide"></i><span>Users</span><i class="bi bi-chevron-down ms-auto"></i>
+      <i class="bi bi-menu-button-wide"></i><span>Caterers</span><i class="bi bi-chevron-down ms-auto"></i>
     </a>
     <ul id="components-users" class="nav-content collapse " data-bs-parent="#sidebar-nav">
       <li>
-        <a href="/<?php echo home . route('userCreate', ['ug' => 'user']); ?>">
-          <i class="bi bi-circle"></i><span>Add user</span>
+        <a href="/<?php echo home . route('userCreate', ['ug' => 'caterer']); ?>">
+          <i class="bi bi-circle"></i><span>Add Caterer</span>
         </a>
       </li>
       <li>
-        <a href="/<?php echo home . route('userList', ['ug' => 'user']); ?>">
-          <i class="bi bi-circle"></i><span>All users</span>
+        <a href="/<?php echo home . route('userList', ['ug' => 'caterer']); ?>">
+          <i class="bi bi-circle"></i><span>All Caterers</span>
         </a>
       </li>
     </ul>
   </li>
-  <!-- Fuels component -->
+ 
+  <!-- user -->
+ 
   <li class="nav-item hide">
-    <a class="nav-link collapsed" data-bs-target="#components-ptrols" data-bs-toggle="collapse" href="#">
-      <i class="bi bi-menu-button-wide"></i><span>Petrols</span><i class="bi bi-chevron-down ms-auto"></i>
-    </a>
-    <ul id="components-ptrols" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-      <li>
-        <a href="/<?php echo home . route('fuelCreate', ['fg' => 'petrol']); ?>">
-          <i class="bi bi-circle"></i><span>Add/Deduct</span>
-        </a>
-      </li>
-      <li>
-        <a href="/<?php echo home . route('fuelList', ['fg' => 'petrol']); ?>">
-          <i class="bi bi-circle"></i><span>List</span>
-        </a>
-      </li>
-    </ul>
-  </li>
-  <!-- orders component -->
-  <li class="nav-item">
-    <a class="nav-link collapsed" data-bs-target="#components-orders" data-bs-toggle="collapse" href="#">
-      <i class="bi bi-menu-button-wide"></i><span>Orders </span><i class="bi bi-chevron-down ms-auto"></i>
-    </a>
-    <ul id="components-orders" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-      <li>
-        <a href="/<?php echo home . route('orderListApi',['fg'=>'food']); ?>">
-          <i class="bi bi-circle"></i><span>List</span>
-        </a>
-      </li>
-    </ul>
-  </li>
-  <li class="nav-item">
-    <a class="nav-link collapsed" data-bs-target="#components-drivers" data-bs-toggle="collapse" href="#">
-      <i class="bi bi-menu-button-wide"></i><span>Drivers</span><i class="bi bi-chevron-down ms-auto"></i>
-    </a>
-    <ul id="components-drivers" class="nav-content collapse " data-bs-parent="#sidebar-nav">
-      <li>
-        <a href="/<?php echo home . route('userCreate', ['ug' => 'driver']); ?>">
-          <i class="bi bi-circle"></i><span>Add driver</span>
-        </a>
-      </li>
-      <li>
-        <a href="/<?php echo home . route('userList', ['ug' => 'driver']); ?>">
-          <i class="bi bi-circle"></i><span>All drivers</span>
-        </a>
-      </li>
-    </ul>
-  </li>
-  <li class="nav-item">
     <a class="nav-link collapsed" data-bs-target="#components-admins" data-bs-toggle="collapse" href="#">
       <i class="bi bi-menu-button-wide"></i><span>Admins</span><i class="bi bi-chevron-down ms-auto"></i>
     </a>

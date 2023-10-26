@@ -1,12 +1,7 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
-
-
-use Kreait\Firebase\Factory;
-use Kreait\Firebase\ServiceAccount;
-use Kreait\Firebase\Messaging\CloudMessage;
-use Kreait\Firebase\Messaging\Notification;
+use Endroid\QrCode\QrCode;
 
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/settings.php");
@@ -18,6 +13,23 @@ define("direct_access", 1);
 
 
 
+    function generate()
+    {
+        // Data to be encoded in the QR code
+        $data = "Hello, World!";
+        
+        // Create a QR code instance
+        $qrCode = new QrCode($data);
+        
+        // Set QR code options (optional)
+        $qrCode->setSize(300)->setMargin(10);
+        
+        // Generate QR code image
+        $qrCode->create('qrcode.png');
+        
+        echo "QR code generated successfully!";
+    }
+    generate();
 exit;
 function updateProgressBar($current, $total)
 {

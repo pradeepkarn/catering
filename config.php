@@ -7,7 +7,7 @@ define("TIME_ZONE",$env->TIME_ZONE);
 date_default_timezone_set(TIME_ZONE);
 #server host name or simply leave it as it is
 define("MY_DOMAIN",$env->MY_DOMAIN);
-define("SERVER_DOMAIN",$env->SERVER_DOMAIN);
+// define("SERVER_DOMAIN",$env->SERVER_DOMAIN);
 #server host name or simply leave it as it is
 define("PK_DB_HOST",$env->DB_HOST);
 #Database name
@@ -22,8 +22,8 @@ define("WS_PORT",$env->WS_PORT);
 #base uri
 define("BASEURI",$env->BASEURI);
 #paynow data
-define("INTEGRATION_ID",$env->INTEGRATION_ID);
-define("INTEGRATION_KEY",$env->INTEGRATION_KEY);
+// define("INTEGRATION_ID",$env->INTEGRATION_ID);
+// define("INTEGRATION_KEY",$env->INTEGRATION_KEY);
 // define("email",$env->EMAIL);
 #Define real location of file
 define ('RPATH', realpath(dirname(__FILE__)));
@@ -42,15 +42,15 @@ $requri = isset($_SERVER['REQUEST_URI'])?rtrim($_SERVER['REQUEST_URI'], '/'):[];
 $request_uri = str_replace("/".home,'',$requri, $requri);
 define("REQUEST_URI",$request_uri);
 
-define("APP_ID",$env->APP_ID);
+// define("APP_ID",$env->APP_ID);
 #server host name or simply leave it as it is
-define("REDIRECT_URI",$env->REDIRECT_URI);
-#Database name
-define("TOKEN_URL",$env->TOKEN_URL);
-#Database username
-define("USER_DATA_URL",$env->USER_DATA_URL);
-#Database password
-define("APP_SECRET",$env->APP_SECRET);
+// define("REDIRECT_URI",$env->REDIRECT_URI);
+// #Database name
+// define("TOKEN_URL",$env->TOKEN_URL);
+// #Database username
+// define("USER_DATA_URL",$env->USER_DATA_URL);
+// #Database password
+// define("APP_SECRET",$env->APP_SECRET);
 
 
 // General Codes
@@ -121,7 +121,7 @@ define("email", $env->email);
 define("emailhost", $env->emailhost);
 define("emailpass", $env->emailpass);
 
-define("REST_API_ENDPOINT", $env->REST_API_ENDPOINT);
+// define("REST_API_ENDPOINT", $env->REST_API_ENDPOINT);
 
 
 function php_mailer($new_PHPMailer)
@@ -137,4 +137,4 @@ function php_mailer($new_PHPMailer)
    return $mail;
 }
 
-const MAPBOX_ACCESS_TOKEN = "pk.eyJ1Ijoid2ViYXJ0dmlzaW9uIiwiYSI6ImNsbTBlZTJjNDAzcHYzcXA5cXUwbnZ6d2MifQ.Ts7Y-Y3y8U-rLSiTTqjOlw";
+const MAPBOX_ACCESS_TOKEN = "mgmgmgmgmghmggmngmg";

@@ -38,7 +38,7 @@ $req->ug = $ug;
                             <h4>Lats name</h4>
                             <input type="text" name="last_name" value="<?php echo $ud->last_name; ?>" class="form-control my-3" placeholder="Last name">
                         </div>
-                        <?php if ($req->ug == 'driver') : ?>
+                        <?php if ($req->ug == 'caterer') : ?>
 
                             <div class="col-md-6 my-2">
                                 <label for="">National ID No.</label>
@@ -50,9 +50,9 @@ $req->ug = $ug;
                             </div>
 
 
-                            <div class="col-md-6 my-2">
+                            <!-- <div class="col-md-6 my-2">
                                 <label for="">Vehicle No.</label>
-                                <input type="text" name="vhcl_no" value="<?php echo $ud->vhcl_no; ?>" class="form-control">
+                                <input type="text" name="vhcl_no" value="<?php //echo $ud->vhcl_no; ?>" class="form-control">
                             </div>
                             <div class="col-md-6 my-2">
                                 <label for="">Vehicle Doc (PDF)</label>
@@ -61,12 +61,12 @@ $req->ug = $ug;
 
                             <div class="col-md-6 my-2">
                                 <label for="">DL No.</label>
-                                <input type="text" name="dl_no" value="<?php echo $ud->dl_no; ?>" class="form-control">
+                                <input type="text" name="dl_no" value="<?php //echo $ud->dl_no; ?>" class="form-control">
                             </div>
                             <div class="col-md-6 my-2">
                                 <label for="">DL DOC (PDF)</label>
                                 <input accept="application/pdf" type="file" name="dl_doc" class="form-control">
-                            </div>
+                            </div> -->
 
                         <?php endif; ?>
                         <div class="col-md-12">
@@ -91,13 +91,13 @@ $req->ug = $ug;
                     <hr>
                     <div class="d-flex justify-content-between">
                    
-                        <a class="btn btn-sm btn-success" target="_blank" href="<?php echo BASEURI . "/media/docs/" . $ud->nid_doc; ?>"> <i class="bi bi-eye"></i> National ID</a>
+                        <a class="btn btn-sm btn-success" target="_blank" href="/<?php echo MEDIA_URL . "/docs/" . $ud->nid_doc; ?>"> <i class="bi bi-eye"></i> National ID</a>
                     
                   
-                        <a class="btn btn-sm btn-success" target="_blank" href="<?php echo BASEURI . "/media/docs/" . $ud->dl_doc; ?>"> <i class="bi bi-eye"></i> DL</a>
+                        <!-- <a class="btn btn-sm btn-success" target="_blank" href="<?php //echo BASEURI . "/media/docs/" . $ud->dl_doc; ?>"> <i class="bi bi-eye"></i> DL</a> -->
                     
                     
-                        <a class="btn btn-sm btn-success" target="_blank" href="<?php echo BASEURI . "/media/docs/" . $ud->vhcl_doc; ?>"> <i class="bi bi-eye"></i> RC</a>
+                        <!-- <a class="btn btn-sm btn-success" target="_blank" href="<?php //echo BASEURI . "/media/docs/" . $ud->vhcl_doc; ?>"> <i class="bi bi-eye"></i> RC</a> -->
                  
                     </div>
 

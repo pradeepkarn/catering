@@ -37,7 +37,7 @@ $req= $context->req;
                             <h4>Lats name</h4>
                             <input type="text" name="last_name" class="form-control my-3" placeholder="Last name">
                         </div>
-                        <?php if ($req->ug=='driver'): ?>
+                        <?php if ($req->ug=='caterer'): ?>
                         
                             <div class="col-md-6 my-2">
                                 <label for="">National ID No.</label>
@@ -49,23 +49,23 @@ $req= $context->req;
                             </div>
                         
                         
-                            <div class="col-md-6 my-2">
+                            <!-- <div class="col-md-6 my-2">
                                 <label for="">Vehicle No.</label>
                                 <input type="text" name="vhcl_no" class="form-control">
                             </div>
                             <div class="col-md-6 my-2">
                                 <label for="">Vehicle Doc (PDF)</label>
                                 <input accept="application/pdf" type="file" name="vhcl_doc" class="form-control">
-                            </div>
+                            </div> -->
 
-                            <div class="col-md-6 my-2">
+                            <!-- <div class="col-md-6 my-2">
                                 <label for="">DL No.</label>
                                 <input type="text" name="dl_no" class="form-control">
                             </div>
                             <div class="col-md-6 my-2">
                                 <label for="">DL DOC (PDF)</label>
                                 <input accept="application/pdf" type="file" name="dl_doc" class="form-control">
-                            </div>
+                            </div> -->
                         
                         <?php endif; ?>
                         <div class="col-md-12">
