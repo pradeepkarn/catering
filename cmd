@@ -16,7 +16,7 @@ define("direct_access", 1);
     function generate()
     {
         // Data to be encoded in the QR code
-        $data = "Hello, World!";
+        $data = "Hello, World s!";
         
         // Create a QR code instance
         $qrCode = new QrCode($data);
@@ -27,7 +27,6 @@ define("direct_access", 1);
         // Generate QR code image
         $qrCode->create('qrcode.png');
         
-        echo "QR code generated successfully!";
     }
     generate();
 exit;
