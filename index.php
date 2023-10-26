@@ -4,6 +4,7 @@ ini_set('display_errors', 1);
 session_start();
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/settings.php");
+require_once(__DIR__ . "/plugins/phpqrcode/qrlib.php");
 import("/includes/class-autoload.inc.php");
 import("functions.php");
 import("settings.php");

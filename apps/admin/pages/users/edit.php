@@ -52,7 +52,8 @@ $req->ug = $ug;
 
                             <!-- <div class="col-md-6 my-2">
                                 <label for="">Vehicle No.</label>
-                                <input type="text" name="vhcl_no" value="<?php //echo $ud->vhcl_no; ?>" class="form-control">
+                                <input type="text" name="vhcl_no" value="<?php //echo $ud->vhcl_no; 
+                                                                            ?>" class="form-control">
                             </div>
                             <div class="col-md-6 my-2">
                                 <label for="">Vehicle Doc (PDF)</label>
@@ -61,7 +62,8 @@ $req->ug = $ug;
 
                             <div class="col-md-6 my-2">
                                 <label for="">DL No.</label>
-                                <input type="text" name="dl_no" value="<?php //echo $ud->dl_no; ?>" class="form-control">
+                                <input type="text" name="dl_no" value="<?php //echo $ud->dl_no; 
+                                                                        ?>" class="form-control">
                             </div>
                             <div class="col-md-6 my-2">
                                 <label for="">DL DOC (PDF)</label>
@@ -72,6 +74,9 @@ $req->ug = $ug;
                         <div class="col-md-12">
                             <h4>Bio</h4>
                             <textarea class="form-control" name="bio" aria-hidden="true"><?php echo $ud->bio; ?></textarea>
+                            <div class="text-center">
+                                <img style="height: 200px;" src="/<?php echo home . route('generateQRCode', ['id' => $ud->id]); ?>" alt="">
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -82,6 +87,7 @@ $req->ug = $ug;
                     <div class="text-center">
                         <img style="width:200px; height:200px; object-fit:cover; border-radius:50%;" id="image" src="/<?php echo MEDIA_URL; ?>/images/profiles/<?php echo $ud->image; ?>" alt="<?php echo $ud->image; ?>">
                     </div>
+
                     <h4>Password</h4>
                     <input type="text" name="password" class="form-control my-3" placeholder="Password">
 
@@ -90,15 +96,9 @@ $req->ug = $ug;
                     </div>
                     <hr>
                     <div class="d-flex justify-content-between">
-                   
+
                         <a class="btn btn-sm btn-success" target="_blank" href="/<?php echo MEDIA_URL . "/docs/" . $ud->nid_doc; ?>"> <i class="bi bi-eye"></i> National ID</a>
-                    
-                  
-                        <!-- <a class="btn btn-sm btn-success" target="_blank" href="<?php //echo BASEURI . "/media/docs/" . $ud->dl_doc; ?>"> <i class="bi bi-eye"></i> DL</a> -->
-                    
-                    
-                        <!-- <a class="btn btn-sm btn-success" target="_blank" href="<?php //echo BASEURI . "/media/docs/" . $ud->vhcl_doc; ?>"> <i class="bi bi-eye"></i> RC</a> -->
-                 
+
                     </div>
 
 

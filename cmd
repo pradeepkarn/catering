@@ -8,6 +8,7 @@ import("/includes/class-autoload.inc.php");
 import("functions.php");
 import("settings.php");
 define("direct_access", 1);
+
 ############################################################################
 
 exit;
