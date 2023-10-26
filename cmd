@@ -1,7 +1,6 @@
 <?php
 
 use PHPMailer\PHPMailer\PHPMailer;
-use Endroid\QrCode\QrCode;
 
 require_once(__DIR__ . "/config.php");
 require_once(__DIR__ . "/settings.php");
@@ -11,24 +10,6 @@ import("settings.php");
 define("direct_access", 1);
 ############################################################################
 
-
-
-    function generate()
-    {
-        // Data to be encoded in the QR code
-        $data = "Hello, World s!";
-        
-        // Create a QR code instance
-        $qrCode = new QrCode($data);
-        
-        // Set QR code options (optional)
-        $qrCode->setSize(300)->setMargin(10);
-        
-        // Generate QR code image
-        $qrCode->create('qrcode.png');
-        
-    }
-    generate();
 exit;
 function updateProgressBar($current, $total)
 {
