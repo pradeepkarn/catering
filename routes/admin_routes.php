@@ -46,6 +46,18 @@ $admin_routes = [
     '/admin/package/delete/{id}' => 'Package_ctrl@delete_trash@name.packageDelete',
     '/admin/package/edit/{id}/save-by-ajax' => 'Package_ctrl@update@name.packageUpdateAjax',
     '/admin/package/toggle-marked-page' => 'Package_ctrl@toggle_trending@name.packageToggleMarked',
+    // events
+    '/admin/events/create' => 'Events_ctrl@create@name.eventCreate',
+    '/admin/events/create/save-by-ajax' => 'Events_ctrl@save@name.eventStoreAjax',
+    '/admin/events/list' => 'Events_ctrl@list@name.eventList',
+    '/admin/events/trash-list' => 'Events_ctrl@trash_list@name.eventTrashList',
+    '/admin/events/edit/{id}' => 'Events_ctrl@edit@name.eventEdit',
+    '/admin/events/delete-more-img-ajax' => 'Events_ctrl@delete_more_img@name.eventDeleteMoreImgAjax',
+    '/admin/events/trash/{id}' => 'Events_ctrl@move_to_trash@name.eventTrash',
+    '/admin/events/restore/{id}' => 'Events_ctrl@restore@name.eventRestore',
+    '/admin/events/delete/{id}' => 'Events_ctrl@delete_trash@name.eventDelete',
+    '/admin/events/edit/{id}/save-by-ajax' => 'Events_ctrl@update@name.eventUpdateAjax',
+    '/admin/events/toggle-marked-page' => 'Events_ctrl@toggle_trending@name.eventToggleMarked',
     // Sliders
     '/admin/slider/create' => 'Slider_ctrl@create@name.sliderCreate',
     '/admin/slider/create/save-by-ajax' => 'Slider_ctrl@save@name.sliderStoreAjax',

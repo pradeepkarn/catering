@@ -118,6 +118,25 @@
     </ul>
   </li>
  
+  <!-- events components -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" data-bs-target="#components-events" data-bs-toggle="collapse" href="#">
+      <i class="bi bi-menu-button-wide"></i><span>Events</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="components-events" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+      <li>
+        <a href="/<?php echo home . route('eventCreate'); ?>">
+          <i class="bi bi-circle"></i><span>Add Event</span>
+        </a>
+      </li>
+      <li>
+        <a href="/<?php echo home . route('eventList'); ?>">
+          <i class="bi bi-circle"></i><span>All event</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+ 
   <!-- user -->
  
   <li class="nav-item hide">
