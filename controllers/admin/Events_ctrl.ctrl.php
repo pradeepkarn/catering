@@ -175,8 +175,8 @@ class Events_ctrl
             $arr['address'] = $request->address;
             $arr['lat'] = $request->lat??null;
             $arr['lon'] = $request->lon??null;
-            $arr['managers'] = json_encode($request->managers)??json_encode([]);
-            $arr['employees'] = json_encode($request->employees)??json_encode([]);
+            $arr['managers'] = json_encode($request->managers??'[]')??json_encode([]);
+            $arr['employees'] = json_encode($request->employees??'[]')??json_encode([]);
             $moreimg = [];
             if (isset($_FILES['moreimgs'])) {
                 $fl = $_FILES['moreimgs'];
@@ -295,8 +295,8 @@ class Events_ctrl
             $arr['address'] = $request->address;
             $arr['lat'] = $request->lat??null;
             $arr['lon'] = $request->lon??null;
-            $arr['managers'] = json_encode($request->managers)??json_encode([]);
-            $arr['employees'] = json_encode($request->employees)??json_encode([]);
+            $arr['managers'] = json_encode($request->managers??'[]')??json_encode([]);
+            $arr['employees'] = json_encode($request->employees??'[]')??json_encode([]);
             // $mngrjsn = json_decode($content->managers??'[]',true)??[];
             // $emplsjsn = json_decode($content->employees??'[]',true)??[];
             $imsgjsn = json_decode($content->imgs??'[]',true);
