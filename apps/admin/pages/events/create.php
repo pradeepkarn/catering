@@ -21,38 +21,13 @@ $user_list = $context->user_list;
                     <h4>Title</h4>
                     <input type="text" name="title" class="form-control my-3" placeholder="Title">
                     <h6>Slug</h6>
-                    <input type="text" name="slug" class="form-control my-3" placeholder="slug">
+                    <input type="text" name="slug" class="hide form-control my-3" placeholder="slug">
 
-                    
-
-                    <!-- <h4>Category</h4>
-                    <select name="parent_id" class="form-select my-3">
-                        <option value="0">Uncategorised</option>
-                        <?php // foreach ($catlist as  $cv) {
-                        //$cv = obj($cv);
-                        ?>
-                            <option value="<?php // echo $cv->id; 
-                                            ?>"><?php // echo $cv->title; 
-                                                ?></option>
-                        <?php //} 
-                        ?>
-                        <?php ?>
-                    </select> -->
-                    <!-- <div class="row">
-                        <div class="col">
-                            <label for="">Latitude</label>
-                            <input type="text" class="form-control my-2" name="lat">
-                        </div>
-                        <div class="col">
-                            <label for="">Longitude</label>
-                            <input type="text" class="form-control my-2" name="lon">
-                        </div>
-                    </div> -->
                     <textarea class="tinymce-editor" name="content" id="mce_0" aria-hidden="true"></textarea>
-                    <h4>Tags</h4>
+                    <!-- <h4>Tags</h4>
                     <textarea class="form-control" name="meta_tags" aria-hidden="true"></textarea>
                     <h4>Meta description</h4>
-                    <textarea class="form-control" name="meta_description" aria-hidden="true"></textarea>
+                    <textarea class="form-control" name="meta_description" aria-hidden="true"></textarea> -->
                 </div>
                 <div class="col-md-4">
                     <h4>Banner</h4>
@@ -62,17 +37,17 @@ $user_list = $context->user_list;
                     <button type="button" class="btn btn-secondary text-white mt-2" id="add-image">Images <i class="bi bi-plus"></i> </button>
                     <hr>
                     <div class="dropdown my-3 d-grid">
-                        <button class="btn btn-primary dropdown-toggle" type="button" id="employeeDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="managerDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
                             Select Managers
                         </button>
-                        <ul class="dropdown-menu w-100" aria-labelledby="employeeDropdown">
+                        <ul class="dropdown-menu w-100" aria-labelledby="managerDropdown">
                             <?php foreach ($user_list as $key => $emp) :
                                 $emp = obj($emp);
-                                ?>
-                                <li class="px-2">
+                            ?>
+                                <li class="px-2 py-2">
                                     <div class="form-group">
                                         <label for="employee1">
-                                            <input name="managers[]" type="checkbox" value="<?php echo $emp->id; ?>" class="form-check-input" id="employee1"> <?php echo $emp->first_name; ?>
+                                            <input name="managers[]" type="checkbox" value="<?php echo $emp->id; ?>" class="form-check-input" id="manager<?php echo $emp->id; ?>"> <?php echo $emp->first_name; ?>
                                         </label>
                                     </div>
                                 </li>
@@ -86,16 +61,17 @@ $user_list = $context->user_list;
                         <ul class="dropdown-menu w-100" aria-labelledby="employeeDropdown">
                             <?php foreach ($user_list as $key => $emp) :
                                 $emp = obj($emp);
-                                ?>
-                                <li class="px-2">
+                            ?>
+                                <li class="px-2 py-2">
                                     <div class="form-group">
                                         <label for="employee1">
-                                            <input name="employees[]" type="checkbox" value="<?php echo $emp->id; ?>" class="form-check-input" id="employee1"> <?php echo $emp->first_name; ?>
+                                            <input name="employees[]" type="checkbox" value="<?php echo $emp->id; ?>" class="form-check-input" id="employee<?php echo $emp->id; ?>"> <?php echo $emp->first_name; ?>
                                         </label>
                                     </div>
                                 </li>
                             <?php endforeach; ?>
                         </ul>
+
                     </div>
                     <!-- <h4>Price/Unit</h4>
                     <input type="number" scope="any" name="price" class="form-control my-3" placeholder="Price"> -->

@@ -2,6 +2,9 @@
 $event_detail = $context->event_detail;
 $pd = obj($event_detail);
 $catlist = $context->cat_list;
+$user_list = $context->user_list;
+$managers = json_decode($pd->managers ?? [], true) ?? [];
+$employees = json_decode($pd->employees ?? [], true) ?? [];
 $meta_tags = null;
 $meta_desc = null;
 if ($pd->json_obj != "") {
@@ -22,7 +25,7 @@ if ($pd->json_obj != "") {
                 msg: res.msg,
                 icon: 'success'
             });
-           location.reload();
+            location.reload();
         } else if (res.success === false) {
             swalert({
                 title: 'Failed',
@@ -55,94 +58,43 @@ if ($pd->json_obj != "") {
                     <h4>Title</h4>
                     <input type="text" name="title" value="<?php echo $pd->title; ?>" class="form-control my-3" placeholder="Title">
                     <h6>Slug</h6>
-                    <input type="text" name="slug" value="<?php echo $pd->slug; ?>" class="form-control my-3" placeholder="slug">
-                    <h4>Category</h4>
-                    <select name="parent_id" class="form-select my-3">
-                        <option <?php echo $pd->parent_id == 0 ? "selected" : null; ?> value="0">Uncategorised</option>
-                        <?php foreach ($catlist as  $cv) {
-                            $cv = obj($cv);
-                        ?>
-                            <option <?php echo $pd->parent_id == $cv->id ? "selected" : null; ?> value="<?php echo $cv->id; ?>"><?php echo $cv->title; ?></option>
-                        <?php } ?>
-                        <?php ?>
-                    </select>
-                    <div class="row">
-                        <div class="col">
-                            <label for="">Latitude</label>
-                            <input type="text" class="form-control my-2" name="lat" value="<?php echo $pd->lat ?? null; ?>">
-                        </div>
-                        <div class="col">
-                            <label for="">Longitude</label>
-                            <input type="text" class="form-control my-2" name="lon" value="<?php echo $pd->lon ?? null; ?>">
-                        </div>
-                    </div>
+                    <input type="text" name="slug" value="<?php echo $pd->slug; ?>" class="hide form-control my-3" placeholder="slug">
+
+
                     <textarea class="tinymce-editor" name="content" id="mce_0" aria-hidden="true"><?php echo $pd->content; ?></textarea>
-                    <h4>Tags</h4>
-                    <textarea class="form-control" name="meta_tags" aria-hidden="true"><?php echo $meta_tags; ?></textarea>
+                    <!-- <h4>Tags</h4>
+                    <textarea class="form-control" name="meta_tags" aria-hidden="true"><?php //echo $meta_tags; 
+                                                                                        ?></textarea>
                     <h4>Meta description</h4>
-                    <textarea class="form-control" name="meta_description" aria-hidden="true"><?php echo $meta_desc; ?></textarea>
-
-                    <section id="add-review">
-                        <label for="">Name</label>
-                        <input type="text" name="name_of_user" class="form-control review-data-send">
-                        <label for="">Rating Point</label>
-                        <select name="star_point" class="form-select review-data-send">
-                            <option value="5">5</option>
-                            <option value="4">4</option>
-                            <option value="3">3</option>
-                            <option value="2">2</option>
-                            <option value="1">1</option>
-                        </select>
-                        <label for="">Review Message</label>
-                        <input type="hidden" name="content_id" class="review-data-send" value="<?php echo $pd->id; ?>">
-                        <textarea name="review_message" class="form-control review-data-send"></textarea>
-                        <button id="add-review-btn" class="btn btn-primary" type="button">Add review</button>
-
-                        <h3>Reviews by admin</h3>
-                        <table class="table table-hover" style="max-height: 200px; overflow-y:scroll;">
-                            <tr>
-                                <th>Action</th>
-                                <th>Rating Point</th>
-                                <th>Message</th>
-                                <th>Cust. Name</th>
-                            </tr>
-                            <tr style="background-color: dodgerblue; color:white;">
-                                <th colspan="10">
-                                </th>
-                            </tr>
+                    <textarea class="form-control" name="meta_description" aria-hidden="true"><?php // echo $meta_desc; 
+                                                                                                ?></textarea> -->
+                    <hr>
+                    <h3>Staffs: </h3>
+                    <hr>
+                    <b>Managers:</b>
+                    <ol>
+                        <?php foreach ($user_list as $key => $emp) :
+                            $emp = obj($emp);
+                        ?>
+                            <?php echo in_array($emp->id, $managers) ? "<li>{$emp->first_name} {$emp->last_name}</li>"  : null; ?>
+                        <?php endforeach; ?>
+                    </ol>
+                    <b>Employees:</b>
+                    <ol>
+                        <?php
+                        $emp = null;
+                        foreach ($user_list as $key => $emp) :
+                            $emp = obj($emp);
+                        ?>
                             <?php
-
-                            $rvdta = $context->reviewdata;
-
-                            foreach ($rvdta as $key => $dmrv) :
-                                $dmrv = obj($dmrv);
-                                $rtstar = showStars($rating = $dmrv->rating);
+                            // if (!in_array($emp->id, $managers)) {
+                                echo in_array($emp->id, $employees) ? "<li>{$emp->first_name} {$emp->last_name}</li>"  : null;
+                            // }
                             ?>
-                                <tr>
-                                    <td>
-                                        <input type="radio" class="remove-this-dm-review<?php echo $dmrv->id; ?>" name="dm_review_id" value="<?php echo $dmrv->id; ?>">
-                                        <button id="<?php echo "remove-this-dm-review{$dmrv->id}"; ?>" type="button" class="btn btn-danger btn-sm">Delete</a>
-                                    </td>
-                                    <td>
-                                        <b><?php echo $dmrv->rating . " " . $rtstar; ?></b>
-                                    </td>
-                                    <td><?php echo $dmrv->name; ?></td>
-                                    <td><?php echo $dmrv->message; ?></td>
-                                    <td class="text-end">
-                                        <?php 
-                                        send_to_server_wotf("#remove-this-dm-review{$dmrv->id}",".remove-this-dm-review{$dmrv->id}","commonCallbackHandler",route('deleteReviewAjax', ['rg' => 'event']));
-                                        ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach;
-
-                            ?>
-
-
-                        </table>
-                    </section>
-
-
+                        <?php endforeach;
+                        $emp = null;
+                        ?>
+                    </ol>
                 </div>
                 <div class="col-md-4">
                     <h4>Banner</h4>
@@ -154,9 +106,11 @@ if ($pd->json_obj != "") {
                     <?php
                     $imgs = get_image_list($pd->imgs);
                     $moreimgcount = count($imgs);
+
                     // myprint($imgs);
                     ?>
-                    <h4>Total more images count <?php echo $moreimgcount; ?> </h4>
+                    <!-- <h4>Total more images count <?php //echo $moreimgcount; 
+                                                        ?> </h4> -->
                     <div style="max-height: 200px; overflow-y:scroll; background-color: rgba(0,0,0,0.2);">
                         <?php
                         foreach ($imgs as $key => $img) { ?>
@@ -166,26 +120,79 @@ if ($pd->json_obj != "") {
                         <?php } ?>
                     </div>
 
-                    <h4>Price/Unit</h4>
-                    <input type="number" scope="any" name="price" value="<?php echo $pd->price; ?>" class="form-control my-3" placeholder="Price">
+                    <div class="dropdown my-3 d-grid">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="managerDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            Select Managers
+                        </button>
+                        <ul class="dropdown-menu w-100" aria-labelledby="managerDropdown">
+                            <?php
+                            $emp = null;
+                            foreach ($user_list as $key => $emp) :
+                                $emp = obj($emp);
+                                // if (!in_array($emp->id, $managers)) {
+                            ?>
+                                <li class="px-2 py-2">
+                                    <div class="form-group">
+                                        <label for="employee1">
+                                            <input <?php echo in_array($emp->id, $managers) ? 'checked' : null; ?> name="managers[]" type="checkbox" value="<?php echo $emp->id; ?>" class="form-check-input" id="manager<?php echo $emp->id; ?>"> <?php echo "{$emp->first_name} {$emp->last_name}"; ?>
+                                        </label>
+                                    </div>
+                                </li>
+                            <?php
+                            // } 
+                            endforeach;
+                            $emp = null;
+                            ?>
+                        </ul>
+                    </div>
+                    <div class="dropdown my-3 d-grid">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="employeeDropdown" data-bs-toggle="dropdown" data-bs-auto-close="outside" aria-expanded="false">
+                            Select Employees
+                        </button>
+                        <ul class="dropdown-menu w-100" aria-labelledby="employeeDropdown">
+                            <?php
+                            $emp = null;
+                            foreach ($user_list as $key => $emp) :
+                                $emp = obj($emp);
+                                // if (!in_array($emp->id, $employees)) {
+                            ?>
+                                <li class="px-2 py-2">
+                                    <div class="form-group">
+                                        <label for="employee1">
+                                            <input <?php echo in_array($emp->id, $employees) ? 'checked' : null; ?> name="employees[]" type="checkbox" value="<?php echo $emp->id; ?>" class="form-check-input" id="employee<?php echo $emp->id; ?>"> <?php echo "{$emp->first_name} {$emp->last_name}"; ?>
+                                        </label>
+                                    </div>
+                                </li>
+                            <?php
+                            // } 
+                            endforeach;
+                            $emp = null;
+                            ?>
+                        </ul>
 
-                    <h4>Min. Age</h4>
-                    <input type="text" name="min_age" value="<?php echo $pd->min_age; ?>" class="form-control my-3" placeholder="Min age">
+                    </div>
+                    <!-- <h4>Price/Unit</h4>
+                    <input type="number" scope="any" name="price" class="form-control my-3" placeholder="Price"> -->
 
-                    <h4>Max. People</h4>
-                    <input type="text" name="max_people" value="<?php echo $pd->max_people; ?>" class="form-control my-3" placeholder="Max people">
+                    <!-- <h4>Min. Age</h4>
+                    <input type="text" name="min_age" class="form-control my-3" placeholder="Min age"> -->
 
-                    <h4>Pickup</h4>
-                    <input type="text" name="pickup" value="<?php echo $pd->pickup; ?>" class="form-control my-3" placeholder="Airport">
+                    <h4>Event Date</h4>
+                    <input type="date" name="event_date" value="<?php echo $pd->event_date; ?>" class="form-control my-3">
+                    <h4>Start at</h4>
+                    <input type="time" name="event_time" value="<?php echo $pd->event_time; ?>" class="form-control my-3">
 
-                    <h4>Languages</h4>
-                    <input type="text" name="languages" value="<?php echo $pd->languages; ?>" class="form-control my-3" placeholder="Hindi, Arabic, English, Spanish">
+                    <h4>Address</h4>
+                    <textarea name="address" class="form-control my-3"><?php echo $pd->address; ?></textarea>
 
-                    <h4>No. of days for tours</h4>
-                    <input type="number" scope="any" name="days" value="<?php echo $pd->days; ?>" class="form-control my-3" placeholder="Days for tours">
+                    <!-- <h4>Languages</h4>
+                    <input type="text" name="languages" class="form-control my-3" placeholder="Hindi, Arabic, English, Spanish"> -->
+
+                    <!-- <h4>No. of days for tours</h4>
+                    <input type="number" scope="any" name="days" class="form-control my-3" placeholder="Days for tours"> -->
 
                     <h4>City</h4>
-                    <input type="text" name="city" value="<?php echo $pd->city; ?>" class="form-control my-3" placeholder="City">
+                    <input type="text" name="city" class="form-control my-3" value="<?php echo $pd->city; ?>" placeholder="City">
 
                     <div class="d-grid">
                         <button id="update-event-btn" type="button" class="btn btn-primary my-3">Update</button>
@@ -199,10 +206,8 @@ if ($pd->json_obj != "") {
 </form>
 <script>
     window.onload = () => {
-
         const imageInputevent = document.getElementById('image-input');
         const imageevent = document.getElementById('banner');
-
         imageInputevent.addEventListener('change', (event) => {
             const file = event.target.files[0];
             const fileReader = new FileReader();

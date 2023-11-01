@@ -133,14 +133,15 @@ class Events_ctrl
             'slug' => 'required|string',
             'content' => 'required|string',
             'banner' => 'required|file',
-            'parent_id' => 'required|integer',
-            'price' => 'required|numeric',
-            'days' => 'required|numeric',
+            'event_date' => 'required|date',
+            'event_time' => 'required|time',
+            // 'price' => 'required|numeric',
+            // 'days' => 'required|numeric',
             'city' => 'required|string',
-            'min_age' => 'required|numeric',
-            'max_people' => 'required|numeric',
-            'pickup' => 'required|string',
-            'languages' => 'required|string',
+            // 'min_age' => 'required|numeric',
+            // 'max_people' => 'required|numeric',
+            // 'pickup' => 'required|string',
+            'address' => 'required|string',
         ];
 
         $pass = validateData(data: $data, rules: $rules);
@@ -157,23 +158,25 @@ class Events_ctrl
             $json_arr['meta']['description'] = $request->meta_description;
         }
         if (isset($request->title)) {
+           
             $arr = null;
             $arr['json_obj'] = json_encode($json_arr);
             $arr['content_group'] = "event";
             $arr['title'] = $request->title;
             $arr['slug'] = generate_slug(trim($request->slug));
-            $arr['days'] = $request->days;
-            $arr['price'] = $request->price;
+           
             $arr['city'] = $request->city;
             $arr['content'] = $request->content;
-            $arr['parent_id'] = $request->parent_id;
+         
             $arr['created_at'] = date('Y-m-d H:i:s');
-            $arr['min_age'] = $request->min_age;
-            $arr['max_people'] = $request->max_people;
-            $arr['pickup'] = $request->pickup;
-            $arr['languages'] = $request->languages;
+            
+            $arr['event_date'] = $request->event_date;
+            $arr['event_time'] = $request->event_time;
+            $arr['address'] = $request->address;
             $arr['lat'] = $request->lat??null;
             $arr['lon'] = $request->lon??null;
+            $arr['managers'] = json_encode($request->managers)??json_encode([]);
+            $arr['employees'] = json_encode($request->employees)??json_encode([]);
             $moreimg = [];
             if (isset($_FILES['moreimgs'])) {
                 $fl = $_FILES['moreimgs'];
@@ -255,15 +258,12 @@ class Events_ctrl
         $rules = [
             'id' => 'required|integer',
             'title' => 'required|string',
+            'slug' => 'required|string',
             'content' => 'required|string',
-            'parent_id' => 'required|integer',
-            'price' => 'required|numeric',
-            'days' => 'required|numeric',
+            'event_date' => 'required|date',
+            'event_time' => 'required|time',
             'city' => 'required|string',
-            'min_age' => 'required|numeric',
-            'max_people' => 'required|numeric',
-            'pickup' => 'required|string',
-            'languages' => 'required|string',
+            'address' => 'required|string',
         ];
         $pass = validateData(data: $data, rules: $rules);
         if (!$pass) {
@@ -283,21 +283,22 @@ class Events_ctrl
             $arr['json_obj'] = json_encode($json_arr);
             $arr['content_group'] = "event";
             $arr['title'] = $request->title;
-            if ($content->slug != $request->slug) {
-                $arr['slug'] = generate_slug(trim($request->slug));
-            }
-            $arr['content'] = $request->content;
-            $arr['days'] = $request->days;
-            $arr['price'] = $request->price;
+            $arr['slug'] = generate_slug(trim($request->slug));
+           
             $arr['city'] = $request->city;
-            $arr['parent_id'] = $request->parent_id;
-            $arr['updated_at'] = date('Y-m-d H:i:s');
-            $arr['min_age'] = $request->min_age;
-            $arr['max_people'] = $request->max_people;
-            $arr['pickup'] = $request->pickup;
-            $arr['languages'] = $request->languages;
+            $arr['content'] = $request->content;
+         
+            $arr['created_at'] = date('Y-m-d H:i:s');
+            
+            $arr['event_date'] = $request->event_date;
+            $arr['event_time'] = $request->event_time;
+            $arr['address'] = $request->address;
             $arr['lat'] = $request->lat??null;
             $arr['lon'] = $request->lon??null;
+            $arr['managers'] = json_encode($request->managers)??json_encode([]);
+            $arr['employees'] = json_encode($request->employees)??json_encode([]);
+            // $mngrjsn = json_decode($content->managers??'[]',true)??[];
+            // $emplsjsn = json_decode($content->employees??'[]',true)??[];
             $imsgjsn = json_decode($content->imgs??'[]',true);
             $moreimg = [];
             if (isset($_FILES['moreimgs'])) {
