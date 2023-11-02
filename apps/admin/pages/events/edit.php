@@ -169,14 +169,8 @@ if ($pd->json_obj != "") {
                             $emp = null;
                             ?>
                         </ul>
-
                     </div>
-                    <!-- <h4>Price/Unit</h4>
-                    <input type="number" scope="any" name="price" class="form-control my-3" placeholder="Price"> -->
-
-                    <!-- <h4>Min. Age</h4>
-                    <input type="text" name="min_age" class="form-control my-3" placeholder="Min age"> -->
-
+                   
                     <h4>Event Date</h4>
                     <input type="date" name="event_date" value="<?php echo $pd->event_date; ?>" class="form-control my-3">
                     <h4>Start at</h4>
@@ -185,11 +179,6 @@ if ($pd->json_obj != "") {
                     <h4>Address</h4>
                     <textarea name="address" class="form-control my-3"><?php echo $pd->address; ?></textarea>
 
-                    <!-- <h4>Languages</h4>
-                    <input type="text" name="languages" class="form-control my-3" placeholder="Hindi, Arabic, English, Spanish"> -->
-
-                    <!-- <h4>No. of days for tours</h4>
-                    <input type="number" scope="any" name="days" class="form-control my-3" placeholder="Days for tours"> -->
 
                     <h4>City</h4>
                     <input type="text" name="city" class="form-control my-3" value="<?php echo $pd->city; ?>" placeholder="City">

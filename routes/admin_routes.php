@@ -137,5 +137,11 @@ $admin_routes = [
     // reviews 
     '/admin/reviews/{rg}/add-new' => 'Review_ctrl@add_review_ajax@name.addReviewAjax',
     '/admin/reviews/{rg}/delete' => 'Review_ctrl@delete_review_ajax@name.deleteReviewAjax',
-
+    // QR
+    '/admin/qrdata/list' => 'QR_ctrl@list@name.qrdataList',
+    '/admin/qrdata/trash-list' => 'QR_ctrl@trash_list@name.qrdataTrashList',
+    '/admin/qrdata/create' => 'QR_ctrl@trash_list@name.createQrCode',
+    '/admin/qrdata/trash/{id}' => 'QR_ctrl@move_to_trash@name.qrdataTrash',
+    '/admin/qrdata/restore/{id}' => 'QR_ctrl@restore@name.qrdataRestore',
+    '/admin/qrdata/delete/{id}' => 'QR_ctrl@delete@name.qrdataDelete',
 ];

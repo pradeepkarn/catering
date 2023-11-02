@@ -1239,6 +1239,13 @@ function render_template($path, $data)
   $data = ob_get_clean();
   return $data;
 }
+function myComponent($path, $data=null, $root='admin')
+{
+  ob_start();
+  import(var: "/apps/$root/components/" . $path, context: $data, many: true);
+  $data = ob_get_clean();
+  return $data;
+}
 
 function maskEmailBy50Percent($email)
 {

@@ -21,8 +21,8 @@ const ADMIN_ROLES = array(
 const USER_GROUP = array(
     'admin'=>'admin',
     'user'=>'user',
-    'driver'=>'driver',
+    'caterer'=>'caterer',
 );
-const USER_GROUP_LIST = ['driver','user'];
+const USER_GROUP_LIST = ['caterer','user'];
 
 const RESTAURANT_API_KEY = "6SedFzPnMuFxC9L3hyLbLCJnevY+k8HAv6afu8WiQa0=";

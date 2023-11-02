@@ -116,6 +116,122 @@ class Users_api
             exit;
         }
     }
+    function update_account($req = null)
+    {
+        header('Content-Type: application/json');
+        $ok = true;
+        $req = obj($req);
+        $data  = $_POST;
+        $data['image'] = $_FILES['image'] ?? null;
+
+
+        if (isset($req->ug)) {
+            if (!in_array($req->ug, USER_GROUP_LIST)) {
+                $ok = false;
+                msg_set("Invalid account group");
+            }
+        } else {
+            $ok = false;
+            msg_set("No user group provided");
+        }
+        if (!$ok) {
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
+        $rules = [
+            'token' => 'required|string'
+        ];
+
+        $pass = validateData(data: $data, rules: $rules);
+        if (!$pass) {
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
+
+        $request = obj($data);
+        $user = $this->get_user_by_token($request->token);
+        if (!$user) {
+            msg_set("Invalid token");
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
+        $user = obj($user);
+        // $request->username = $user->username;
+        $this->db = $this->db;
+        $pdo = $this->db->conn;
+        $pdo->beginTransaction();
+        $this->db->tableName = 'pk_user';
+
+        if (!$ok) {
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
+        if (isset($user)) {
+            $arr = null;
+            $arr['first_name'] = $request->first_name ?? $user->first_name;
+            $arr['last_name'] = $request->last_name ?? $user->last_name;
+            if (isset($request->password)) {
+                $arr['password'] = md5($request->password);
+            }
+
+            if (isset($request->bio)) {
+                $arr['bio'] = $request->bio;
+            }
+            $arr['created_at'] = date('Y-m-d H:i:s');
+            $this->db->tableName = 'pk_user';
+            $this->db->insertData = $arr;
+            try {
+                $this->db->pk($user->id);
+                $this->db->update();
+                $request->username = $user->username;
+                if (isset($_FILES['image'])) {
+                    $filearr = $this->upload_files($user->id, $request);
+                    if ($filearr) {
+                        $this->db->pk($user->id);
+                        $this->db->insertData = $filearr;
+                        $this->db->update();
+                    }
+                }
+
+                msg_set('Account updated');
+                $ok = true;
+                $pdo->commit();
+            } catch (PDOException $th) {
+                $pdo->rollBack();
+                msg_set('Account not updated');
+                $ok = false;
+            }
+        } else {
+            $pdo->rollBack();
+            msg_set('Missing required field, uaser not updated');
+            $ok = false;
+        }
+        if (!$ok) {
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        } else {
+            $api['success'] = true;
+            $api['data'] = $this->get_user_by_token($request->token);
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
+    }
     function login_via_token($req = null)
     {
         header('Content-Type: application/json');
@@ -185,7 +301,6 @@ class Users_api
         $req = obj($req);
         $data  = $_POST;
         $data['image'] = $_FILES['image'] ?? null;
-        $data['vhcl_doc'] = $_FILES['vhcl_doc'] ?? null;
         $data['dl_doc'] = $_FILES['dl_doc'] ?? null;
         $data['nid_doc'] = $_FILES['nid_doc'] ?? null;
 
@@ -207,21 +322,16 @@ class Users_api
         }
         $rules = [
             'email' => 'required|email',
-            // 'username' => 'required|string|min:4|max:16',
             'image' => 'required|file',
             'first_name' => 'required|string',
             'password' => 'required|string'
         ];
-        if ($req->ug == 'driver') {
-            $rules_driver = [
-                'dl_doc' => 'required|file',
+        if ($req->ug == 'caterer') {
+            $rules_caterer = [
                 'nid_doc' => 'required|file',
-                'vhcl_doc' => 'required|file',
-                'dl_no' => 'required|string',
                 'nid_no' => 'required|string',
-                'vhcl_no' => 'required|string',
             ];
-            $rules = array_merge($rules, $rules_driver);
+            $rules = array_merge($rules, $rules_caterer);
         }
         $pass = validateData(data: $data, rules: $rules);
         if (!$pass) {
@@ -267,8 +377,7 @@ class Users_api
             $arr['mobile'] = intval($request?->mobile) ?? null;
             $arr['password'] = md5($request->password);
             $arr['nid_no'] = sanitize_remove_tags($request->nid_no ?? null);
-            $arr['dl_no'] = sanitize_remove_tags($request->dl_no ?? null);
-            $arr['vhcl_no'] = sanitize_remove_tags($request->vhcl_no ?? null);
+           
             if (isset($request->bio)) {
                 $arr['bio'] = $request->bio;
             }
@@ -351,111 +460,13 @@ class Users_api
                     $filearr['nid_doc'] = $docname;
                 }
             }
-            if (isset($request->dl_doc) && $request->dl_doc['name'] != "" && $request->dl_doc['error'] == 0) {
-                $ext = pathinfo($request->dl_doc['name'], PATHINFO_EXTENSION);
-                $docname = str_replace(" ", "_", getUrlSafeString($request->username)) . uniqid("_") . "." . $ext;
-                $dir = MEDIA_ROOT . "docs/" . $docname;
-                $upload = move_uploaded_file($request->dl_doc['tmp_name'], $dir);
-                if ($upload) {
-                    $arr['dl_doc'] = $docname;
-                    if ($old) {
-                        if ($old->image != "") {
-                            $olddir = MEDIA_ROOT . "docs/" . $old->dl_doc;
-                            if (file_exists($olddir)) {
-                                unlink($olddir);
-                            }
-                        }
-                    }
-                    $filearr['dl_doc'] = $imgname;
-                }
-            }
-            if (isset($request->vhcl_doc) && $request->vhcl_doc['name'] != "" && $request->vhcl_doc['error'] == 0) {
-                $ext = pathinfo($request->vhcl_doc['name'], PATHINFO_EXTENSION);
-                $docname = str_replace(" ", "_", getUrlSafeString($request->username)) . uniqid("_") . "." . $ext;
-                $dir = MEDIA_ROOT . "docs/" . $docname;
-                $upload = move_uploaded_file($request->vhcl_doc['tmp_name'], $dir);
-                if ($upload) {
-                    $arr['vhcl_doc'] = $docname;
-                    if ($old) {
-                        if ($old->image != "") {
-                            $olddir = MEDIA_ROOT . "docs/" . $old->vhcl_doc;
-                            if (file_exists($olddir)) {
-                                unlink($olddir);
-                            }
-                        }
-                    }
-                    $filearr['vhcl_doc'] = $docname;
-                }
-            }
             return $filearr;
         } else {
             return false;
         }
     }
 
-    function search_users($req = null)
-    {
-        header('Content-Type: application/json');
-        $ok = true;
-        $req = obj($_GET);
-        $data  = $_GET;
-
-        $rules = [
-            'q' => 'required|string'
-        ];
-
-        $pass = validateData(data: arr($data), rules: $rules);
-        if (!$pass) {
-            $api['success'] = false;
-            $api['data'] = null;
-            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
-            echo json_encode($api);
-            exit;
-        }
-        $users = $this->user_search_list(user_group: "driver", keyword: $req->q);
-        if (count($users) > 0) {
-            $searchedData = array_map(function ($user) {
-                return [
-                    "id" => $user["id"],
-                    "first_name" => $user["first_name"],
-                    "last_name" => $user["last_name"],
-                    "username" => $user["username"],
-                    "email" => $user["email"],
-                    "isd_code" => $user["isd_code"],
-                    "mobile" => $user["mobile"],
-                ];
-            }, $users);
-            $api['success'] = true;
-            $api['data'] = $searchedData;
-            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
-            echo json_encode($api);
-            exit;
-        } else {
-            $api['success'] = false;
-            $api['data'] = null;
-            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
-            echo json_encode($api);
-            exit;
-        }
-    }
-
-    // User search list
-    public function user_search_list($user_group = 'driver', $keyword = '', $ord = "DESC", $limit = 5, $active = 1)
-    {
-        $cntobj = new Model('pk_user');
-        $search_arr['username'] = $keyword;
-        $search_arr['email'] = $keyword;
-        $search_arr['first_name'] = $keyword;
-        $search_arr['last_name'] = $keyword;
-        $search_arr['mobile'] = $keyword;
-        return $cntobj->search(
-            assoc_arr: $search_arr,
-            ord: $ord,
-            limit: $limit,
-            whr_arr: array('user_group' => $user_group, 'is_active' => $active)
-        );
-    }
-
+   
     function get_user_by_id($id = null)
     {
         if ($id) {
@@ -468,7 +479,7 @@ class Users_api
                     'username' => strval($u->username),
                     'first_name' => $u->first_name,
                     'last_name' => $u->last_name,
-                    'image' => img_or_null($u->image),
+                    'image' => dp_or_null($u->image),
                     'email' => $u->email,
                     'isd_code' => $u->isd_code,
                     'mobile' => $u->mobile,
@@ -490,7 +501,7 @@ class Users_api
                     'username' => strval($u->username),
                     'first_name' => $u->first_name,
                     'last_name' => $u->last_name,
-                    'image' => img_or_null($u->image),
+                    'image' => dp_or_null($u->image),
                     'email' => $u->email,
                     'isd_code' => $u->isd_code,
                     'mobile' => $u->mobile,
@@ -499,59 +510,5 @@ class Users_api
             }
         }
         return false;
-    }
-
-    function load_users($req)
-    {
-        $this->user_list(ord: 'desc', page: $this->get->page, limit: $this->get->limit);
-    }
-
-    public function user_list($ord = "DESC", $page = 1, $limit = 10, $active = 1)
-    {
-        header('Content-Type: application/json');
-        $data_limit = "{$page},{$limit}";
-        $cntobj = new Model('pk_user');
-        $users = $cntobj->filter_index(array('user_group' => 'user', 'is_active' => $active), $ord, $limit = $data_limit);
-        $user_list = array();
-        foreach ($users as $u) {
-            $myreq = obj(check_request($myid = USER['id'], $req_to = $u['id']));
-            // myprint($myreq);
-            $is_liked = is_liked($myid = USER['id'], $obj_id = $u['id'], $obj_group = 'profile');
-
-            $user_list[]  = array(
-                'id' => $u['id'],
-                'first_name' => $u['first_name'],
-                'last_name' => $u['last_name'],
-                'image' => dp_or_null($u['image']),
-                'dob' => $u['dob'],
-                'age' => getAgeFromDOB($u['dob']),
-                'caste' => $u['caste'],
-                'caste_detail' => $u['caste_detail'],
-                'gender' => $u['gender'],
-                'religion' => $u['religion'],
-                'occupation' => $u['occupation'],
-                'education' => $u['education'],
-                'address' => $u['address'],
-                'email' => $u['email'],
-                'annual_income' => $u['annual_income'],
-                'bride_or_groom' => bride_or_grom($u['gender']),
-                'profile_link' => "/" . home . route('showPublicProfile', ['profile_id' => $u['id']]),
-                'is_liked' => $is_liked,
-                'myreq' => $myreq
-            );
-        }
-        if (count($users) > 0) {
-            $data['success'] = true;
-            $data['data'] = $user_list;
-            $data['msg'] = null;
-            echo json_encode($data);
-            exit;
-        } else {
-            $data['success'] = false;
-            $data['data'] = null;
-            $data['msg'] = 'No data found';
-            echo json_encode($data);
-            exit;
-        }
     }
 }

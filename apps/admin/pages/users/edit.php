@@ -75,7 +75,7 @@ $req->ug = $ug;
                             <h4>Bio</h4>
                             <textarea class="form-control" name="bio" aria-hidden="true"><?php echo $ud->bio; ?></textarea>
                             <div class=" my-2 text-center">
-                                <a download href="/<?php echo MEDIA_URL . "/images/qrcodes/" . $ud->email; ?>.png">
+                                <a download href="/<?php echo MEDIA_URL . "/images/qrcodes/" . urlencode($ud->email); ?>.png">
                                     <img style="border: 2px dotted green; height: 200px; width:200px; object-fit:contain;" src="/<?php echo home . route('generateQRCode', ['id' => $ud->id]); ?>" alt="">
                                 </a>
                                 <p>Click QR Code to download</p>
@@ -100,7 +100,7 @@ $req->ug = $ug;
                     <hr>
                     <div class="d-flex justify-content-between">
 
-                        <a class="btn btn-sm btn-success" target="_blank" href="/<?php echo MEDIA_URL . "/docs/" . $ud->nid_doc; ?>"> <i class="bi bi-eye"></i> National ID</a>
+                        <a class="btn btn-sm btn-success" target="_blank" href="/<?php echo MEDIA_URL . "/docs/" . urlencode($ud->nid_doc); ?>"> <i class="bi bi-eye"></i> National ID</a>
 
 
                     </div>

@@ -136,6 +136,18 @@
       </li>
     </ul>
   </li>
+  <li class="nav-item">
+    <a class="nav-link collapsed" data-bs-target="#components-qrdata" data-bs-toggle="collapse" href="#">
+      <i class="bi bi-menu-button-wide"></i><span>QR Scanned Data</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="components-qrdata" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+      <li>
+        <a href="/<?php echo home . route('qrdataList'); ?>">
+          <i class="bi bi-circle"></i><span>All Scanned</span>
+        </a>
+      </li>
+    </ul>
+  </li>
  
   <!-- user -->
  
