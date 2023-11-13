@@ -77,6 +77,7 @@ class Event_api
                 $employees = json_decode($event->employees ?? '[]');
                 $unique_employees = array_unique(array_merge($managers,$employees));
                 $am_i_assigned = false;
+                $assigned_as = "NA";
                 if ($myid) {
                     $am_i_assigned = in_array($myid,$unique_employees);
                     if(in_array($myid,$managers) && in_array($myid,$employees)){
