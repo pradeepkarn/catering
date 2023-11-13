@@ -100,7 +100,7 @@ class Event_api
                     'id' => $event->id,
                     'title' => $event->title,
                     'address' => $event->address,
-                    'event_datetime' => strtotime($event->event_date." ".$event->event_time),
+                    'event_datetime' => strval(strtotime($event->event_date." ".$event->event_time)),
                     'number_of_employees' => $unique_employee_count_with_managers,
                     'am_i_assigned' => $am_i_assigned,
                     'assgined_as' => $assigned_as,
