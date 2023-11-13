@@ -99,6 +99,7 @@ class Event_api
                 $evenst[] = array(
                     'id' => $event->id,
                     'title' => $event->title,
+                    'logo' => img_or_null($event->banner),
                     'address' => $event->address,
                     'event_datetime' => strval(strtotime($event->event_date." ".$event->event_time)),
                     'number_of_employees' => $unique_employee_count_with_managers,
