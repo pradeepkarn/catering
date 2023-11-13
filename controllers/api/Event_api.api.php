@@ -25,8 +25,11 @@ class Event_api
         }
         $req = obj($data);
         $user = (new Users_api)->get_user_by_token($req->token);
-
-        $events = $this->get_all_events();
+        if ($user) {
+            $events = $this->get_all_events($user['id']);
+        }else{
+            $events = $this->get_all_events();
+        }
         if ($events) {
             msg_set('Events found successfully');
             $api['success'] = true;
