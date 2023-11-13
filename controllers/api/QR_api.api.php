@@ -55,7 +55,9 @@ class QR_api
                     if ($req->rescan != '1') {
                         msg_set('Please pass rescan permission to scan again');
                         $api['success'] = false;
-                        $api['data'] = null;
+                        $api['data'] = [
+                            'already_scanned'=> 1
+                        ];
                         $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
                         echo json_encode($api);
                         exit;
@@ -70,8 +72,8 @@ class QR_api
                     echo json_encode($api);
                 } else {
                     msg_set('Not not saved');
-                    $api['success'] = true;
-                    $api['data'] = [];
+                    $api['success'] = false;
+                    $api['data'] = null;
                     $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
                     echo json_encode($api);
                 }
@@ -79,7 +81,7 @@ class QR_api
             } catch (PDOException $e) {
                 msg_set('Not saved');
                 $api['success'] = false;
-                $api['data'] = [];
+                $api['data'] = null;
                 $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
                 echo json_encode($api);
                 exit;
