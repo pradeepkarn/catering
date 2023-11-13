@@ -81,7 +81,7 @@ class Event_api
                 if ($myid) {
                     $am_i_assigned = in_array($myid,$unique_employees);
                     if(in_array($myid,$managers) && in_array($myid,$employees)){
-                        $assigned_as = "employee and manager";
+                        $assigned_as = "manager,employee";
                     }
                     else if(!in_array($myid,$managers) && in_array($myid,$employees)){
                         $assigned_as = "employee";
