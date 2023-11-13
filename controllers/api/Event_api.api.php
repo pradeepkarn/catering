@@ -70,11 +70,18 @@ class Event_api
             $evenst = null;
             foreach ($events as $key => $event) {
                 $event = obj($event);
+                $managers = json_decode($event->managers ?? '[]');
+                $employees = json_decode($event->employees ?? '[]');
+
+                $unique_employee_count_with_managers = count(array_unique(array_merge($managers,$employees)));
+
                 $evenst[] = array(
                     'id' => $event->id,
                     'title' => $event->title,
-                    'managers' => json_decode($event->managers ?? '[]'),
-                    'employees' => json_decode($event->employees ?? '[]'),
+                    'address' => $event->address,
+                    'event_date' => $event->event_date,
+                    'event_time' => $event->event_time,
+                    'number_of_employees' => $unique_employee_count_with_managers,
                 );
             }
             return  $evenst;

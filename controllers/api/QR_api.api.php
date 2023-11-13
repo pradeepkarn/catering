@@ -2,7 +2,6 @@
 
 class QR_api
 {
-    
     public $db;
     function __construct()
     {
