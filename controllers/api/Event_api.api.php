@@ -13,7 +13,7 @@ class Event_api
         header('Content-Type: application/json');
         $data  = json_decode(file_get_contents("php://input"), true);
         $rules = [
-            // 'token' => 'required|string'
+            'token' => 'required|string'
         ];
         $pass = validateData(data: $data, rules: $rules);
         if (!$pass) {
@@ -24,7 +24,7 @@ class Event_api
             exit;
         }
         $req = obj($data);
-        // $user = (new Users_api)->get_user_by_token($req->token);
+        $user = (new Users_api)->get_user_by_token($req->token);
 
         $events = $this->get_all_events();
         if ($events) {
@@ -60,7 +60,7 @@ class Event_api
         }
         return null;
     }
-    function get_all_events()
+    function get_all_events($myid=null)
     {
         $this->db->tableName = 'content';
         $arr['is_active'] = 1;
@@ -72,8 +72,25 @@ class Event_api
                 $event = obj($event);
                 $managers = json_decode($event->managers ?? '[]');
                 $employees = json_decode($event->employees ?? '[]');
-
-                $unique_employee_count_with_managers = count(array_unique(array_merge($managers,$employees)));
+                $unique_employees = array_unique(array_merge($managers,$employees));
+                $am_i_assigned = false;
+                if ($myid) {
+                    $am_i_assigned = in_array($myid,$unique_employees);
+                    if(in_array($myid,$managers) && in_array($myid,$employees)){
+                        $assigned_as = "employee and manager";
+                    }
+                    else if(!in_array($myid,$managers) && in_array($myid,$employees)){
+                        $assigned_as = "employee";
+                    }
+                    else if(in_array($myid,$managers) && !in_array($myid,$employees)){
+                        $assigned_as = "manager";
+                    }
+                    else if(!in_array($myid,$managers) && !in_array($myid,$employees)){
+                        $assigned_as = "NA";
+                        $am_i_assigned = false;
+                    }
+                }
+                $unique_employee_count_with_managers = count($unique_employees);
 
                 $evenst[] = array(
                     'id' => $event->id,
@@ -82,6 +99,8 @@ class Event_api
                     'event_date' => $event->event_date,
                     'event_time' => $event->event_time,
                     'number_of_employees' => $unique_employee_count_with_managers,
+                    'am_i_assigned' => $am_i_assigned,
+                    'assgined_as' => $assigned_as,
                 );
             }
             return  $evenst;
