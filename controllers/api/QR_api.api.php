@@ -67,7 +67,7 @@ class QR_api
                 if ($qrid) {
                     msg_set('Scan success, saved in database');
                     $api['success'] = true;
-                    $api['data'] = [];
+                    $api['data'] = null;
                     $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
                     echo json_encode($api);
                 } else {
