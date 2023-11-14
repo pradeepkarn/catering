@@ -54,7 +54,7 @@ class QR_api
                 if ($already_today) {
                     if ($req->rescan != '1') {
                         msg_set('Please pass rescan permission to scan again');
-                        $api['success'] = false;
+                        $api['success'] = true;
                         $api['data'] = [
                             'already_scanned'=> 1
                         ];
