@@ -97,6 +97,7 @@ class Event_api
             $managers = json_decode($event->managers ?? '[]');
             $employees = json_decode($event->employees ?? '[]');
             $employeesList = $this->get_employee_details($db=$this->db, $idList=$employees);
+            $managersList = $this->get_employee_details($db=$this->db, $idList=$employees);
             if (in_array($myid, $managers)) {
                 $unique_employees = array_unique(array_merge($managers, $employees));
                 $am_i_assigned = false;
@@ -117,15 +118,15 @@ class Event_api
                 $unique_employee_count_with_managers = count($unique_employees);
 
                 $myevent = array(
-                    'id' => $event->id,
-                    'title' => $event->title,
-                    'logo' => img_or_null($event->banner),
-                    'address' => $event->address,
-                    'event_datetime' => strval(strtotime($event->event_date . " " . $event->event_time)),
-                    'number_of_employees' => $unique_employee_count_with_managers,
+                    // 'id' => $event->id,
+                    // 'title' => $event->title,
+                    // 'logo' => img_or_null($event->banner),
+                    // 'address' => $event->address,
+                    // 'event_datetime' => strval(strtotime($event->event_date . " " . $event->event_time)),
+                    // 'number_of_employees' => $unique_employee_count_with_managers,
                     'employees'=>$employeesList,
-                    'am_i_assigned' => $am_i_assigned,
-                    'assgined_as' => $assigned_as,
+                    // 'am_i_assigned' => $am_i_assigned,
+                    // 'assgined_as' => $assigned_as,
                 );
             }
         }
