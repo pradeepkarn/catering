@@ -9,5 +9,5 @@ $api_routes = [
     "/api/v1/qr/scanned-data" => 'QR_api@get_scanned_data@name.scanneaCodeApi',
 
     "/api/v1/event/list" => 'Event_api@list@name.eventListApi',
-    "/api/v1/event/details" => 'Event_api@get_event_details@name.eventDetailsApi',
+    "/api/v1/event/employees" => 'Event_api@get_event_details@name.eventDetailsApi',
 ];
