@@ -153,6 +153,9 @@ class QR_api
                     $dta = [];
                     foreach ($reports as $key => $rprts) {
                         $rprts['scan_data'] = json_decode($rprts['scan_data']);
+                        $rprts['scan_datetime'] = strtotime($rprts['scan_date']." ".strtotime($rprts['scan_time']));
+                        unset($rprts['created_at']);
+                        unset($rprts['updated_at']);
                         $dta[] = $rprts;
                     }
                     msg_set('Reports fetched successfully');
