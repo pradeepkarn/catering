@@ -91,16 +91,17 @@ class Event_api
         $arr['id'] = $event_id;
         $arr['content_group'] = 'event';
         $event = $this->db->get($arr);
-        $myevent = null;
+
         if ($event) {
             $event = obj($event);
             $managers = json_decode($event->managers ?? '[]');
             $employees = json_decode($event->employees ?? '[]');
             $employeesList = $this->get_employee_details($db=$this->db, $idList=$employees);
             $empls = null;
-            $data = array_map(function($d){
+            $data = array_map(function($d) {
                 $d['image'] = dp_or_null($d['image']);
-            },$employeesList);
+                return $d;
+            }, $employeesList);
             // $managersList = $this->get_employee_details($db=$this->db, $idList=$employees);
             // if (in_array($myid, $managers)) {
                 // $unique_employees = array_unique(array_merge($managers, $employees));
