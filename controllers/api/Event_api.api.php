@@ -98,9 +98,8 @@ class Event_api
             $employees = json_decode($event->employees ?? '[]');
             $employeesList = $this->get_employee_details($db=$this->db, $idList=$employees);
             $empls = null;
-            array_map(function($d){
+            $data = array_map(function($d){
                 $d['image'] = dp_or_null($d['image']);
-                $empls[] = $d;
             },$employeesList);
             // $managersList = $this->get_employee_details($db=$this->db, $idList=$employees);
             // if (in_array($myid, $managers)) {
@@ -135,7 +134,7 @@ class Event_api
                 // );
             // }
         }
-        return  $empls;
+        return  $data;
     }
     function get_employee_details($db, $idList)
     {
