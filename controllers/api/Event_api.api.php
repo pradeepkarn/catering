@@ -65,7 +65,7 @@ class Event_api
         $req = obj($data);
         $user = (new Users_api)->get_user_by_token($req->token);
         if ($user) {
-            $event = $this->get_event_by_id($user['id'],$req->event_id);
+            $event = $this->get_event_by_id($user['id'], $req->event_id);
         } else {
             $events = null;
         }
@@ -84,7 +84,7 @@ class Event_api
             echo json_encode($api);
         }
     }
-    function get_event_by_id($myid,$event_id)
+    function get_event_by_id($myid, $event_id)
     {
         $this->db->tableName = 'content';
         $arr['is_active'] = 1;
@@ -93,41 +93,49 @@ class Event_api
         $event = $this->db->get($arr);
         $myevent = null;
         if ($event) {
-                $event = obj($event);
-                $managers = json_decode($event->managers ?? '[]');
-                $employees = json_decode($event->employees ?? '[]');
-                if (in_array($myid, $managers)) {
-                    $unique_employees = array_unique(array_merge($managers, $employees));
-                    $am_i_assigned = false;
-                    $assigned_as = "NA";
-                    if ($myid) {
-                        $am_i_assigned = in_array($myid, $unique_employees);
-                        if (in_array($myid, $managers) && in_array($myid, $employees)) {
-                            $assigned_as = "manager, employee";
-                        } else if (!in_array($myid, $managers) && in_array($myid, $employees)) {
-                            $assigned_as = "employee";
-                        } else if (in_array($myid, $managers) && !in_array($myid, $employees)) {
-                            $assigned_as = "manager";
-                        } else if (!in_array($myid, $managers) && !in_array($myid, $employees)) {
-                            $assigned_as = "NA";
-                            $am_i_assigned = false;
-                        }
+            $event = obj($event);
+            $managers = json_decode($event->managers ?? '[]');
+            $employees = json_decode($event->employees ?? '[]');
+            $employeesList = $this->get_employee_details($db=$this->db, $idList=$employees);
+            if (in_array($myid, $managers)) {
+                $unique_employees = array_unique(array_merge($managers, $employees));
+                $am_i_assigned = false;
+                $assigned_as = "NA";
+                if ($myid) {
+                    $am_i_assigned = in_array($myid, $unique_employees);
+                    if (in_array($myid, $managers) && in_array($myid, $employees)) {
+                        $assigned_as = "manager, employee";
+                    } else if (!in_array($myid, $managers) && in_array($myid, $employees)) {
+                        $assigned_as = "employee";
+                    } else if (in_array($myid, $managers) && !in_array($myid, $employees)) {
+                        $assigned_as = "manager";
+                    } else if (!in_array($myid, $managers) && !in_array($myid, $employees)) {
+                        $assigned_as = "NA";
+                        $am_i_assigned = false;
                     }
-                    $unique_employee_count_with_managers = count($unique_employees);
-
-                    $myevent = array(
-                        'id' => $event->id,
-                        'title' => $event->title,
-                        'logo' => img_or_null($event->banner),
-                        'address' => $event->address,
-                        'event_datetime' => strval(strtotime($event->event_date . " " . $event->event_time)),
-                        'number_of_employees' => $unique_employee_count_with_managers,
-                        'am_i_assigned' => $am_i_assigned,
-                        'assgined_as' => $assigned_as,
-                    );
                 }
+                $unique_employee_count_with_managers = count($unique_employees);
+
+                $myevent = array(
+                    'id' => $event->id,
+                    'title' => $event->title,
+                    'logo' => img_or_null($event->banner),
+                    'address' => $event->address,
+                    'event_datetime' => strval(strtotime($event->event_date . " " . $event->event_time)),
+                    'number_of_employees' => $unique_employee_count_with_managers,
+                    'employees'=>$employeesList,
+                    'am_i_assigned' => $am_i_assigned,
+                    'assgined_as' => $assigned_as,
+                );
             }
-            return  $myevent;
+        }
+        return  $myevent;
+    }
+    function get_employee_details($db, $idList)
+    {
+        $escapedIds = implode(',', array_map('intval', $idList));
+        $sql = "SELECT id, CONCAT(first_name, ' ', last_name) AS name, email FROM pk_user WHERE id IN ($escapedIds)";
+        return $db->show($sql);
     }
     function get_all_events($myid = null)
     {
