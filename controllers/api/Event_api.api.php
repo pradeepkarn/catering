@@ -45,23 +45,89 @@ class Event_api
             echo json_encode($api);
         }
     }
-    function get_event_by_id($id)
+    function get_event_details($req = null)
+    {
+        $req = obj($req);
+        header('Content-Type: application/json');
+        $data  = json_decode(file_get_contents("php://input"), true);
+        $rules = [
+            'token' => 'required|string',
+            'event_id' => 'required|numeric'
+        ];
+        $pass = validateData(data: $data, rules: $rules);
+        if (!$pass) {
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
+        $req = obj($data);
+        $user = (new Users_api)->get_user_by_token($req->token);
+        if ($user) {
+            $event = $this->get_event_by_id($user['id'],$req->event_id);
+        } else {
+            $events = null;
+        }
+        if ($event) {
+            msg_set('Events found successfully');
+            $api['success'] = true;
+            $api['data'] = $event;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        } else {
+            msg_set('Event not found or it might be closed or you may not be assigned');
+            $api['success'] = false;
+            $api['data'] =  null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+        }
+    }
+    function get_event_by_id($myid,$event_id)
     {
         $this->db->tableName = 'content';
         $arr['is_active'] = 1;
+        $arr['id'] = $event_id;
         $arr['content_group'] = 'event';
-        $arr['id'] = $id;
-        $event = $this->db->findOne($arr);
+        $event = $this->db->get($arr);
+        $myevent = null;
         if ($event) {
-            $event = obj($event);
-            return (object) array(
-                'id' => $event->id,
-                'title' => $event->title,
-                'managers' => json_decode($event->managers ?? '[]'),
-                'employees' => json_decode($event->employees ?? '[]'),
-            );
-        }
-        return null;
+                $event = obj($event);
+                $managers = json_decode($event->managers ?? '[]');
+                $employees = json_decode($event->employees ?? '[]');
+                if (in_array($myid, $managers)) {
+                    $unique_employees = array_unique(array_merge($managers, $employees));
+                    $am_i_assigned = false;
+                    $assigned_as = "NA";
+                    if ($myid) {
+                        $am_i_assigned = in_array($myid, $unique_employees);
+                        if (in_array($myid, $managers) && in_array($myid, $employees)) {
+                            $assigned_as = "manager, employee";
+                        } else if (!in_array($myid, $managers) && in_array($myid, $employees)) {
+                            $assigned_as = "employee";
+                        } else if (in_array($myid, $managers) && !in_array($myid, $employees)) {
+                            $assigned_as = "manager";
+                        } else if (!in_array($myid, $managers) && !in_array($myid, $employees)) {
+                            $assigned_as = "NA";
+                            $am_i_assigned = false;
+                        }
+                    }
+                    $unique_employee_count_with_managers = count($unique_employees);
+
+                    $myevent = array(
+                        'id' => $event->id,
+                        'title' => $event->title,
+                        'logo' => img_or_null($event->banner),
+                        'address' => $event->address,
+                        'event_datetime' => strval(strtotime($event->event_date . " " . $event->event_time)),
+                        'number_of_employees' => $unique_employee_count_with_managers,
+                        'am_i_assigned' => $am_i_assigned,
+                        'assgined_as' => $assigned_as,
+                    );
+                }
+            }
+            return  $myevent;
     }
     function get_all_events($myid = null)
     {
