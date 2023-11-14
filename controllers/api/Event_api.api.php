@@ -70,7 +70,7 @@ class Event_api
             $events = null;
         }
         if ($event) {
-            msg_set('Events found successfully');
+            msg_set('Employees found successfully');
             $api['success'] = true;
             $api['data'] = $event;
             $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
