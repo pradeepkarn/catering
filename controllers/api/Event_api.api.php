@@ -27,8 +27,8 @@ class Event_api
         $user = (new Users_api)->get_user_by_token($req->token);
         if ($user) {
             $events = $this->get_all_events($user['id']);
-        }else{
-            $events = $this->get_all_events();
+        } else {
+            $events = null;
         }
         if ($events) {
             msg_set('Events found successfully');
@@ -63,51 +63,50 @@ class Event_api
         }
         return null;
     }
-    function get_all_events($myid=null)
+    function get_all_events($myid = null)
     {
         $this->db->tableName = 'content';
         $arr['is_active'] = 1;
         $arr['content_group'] = 'event';
         $events = $this->db->filter($arr);
         if ($events) {
-            $evenst = null;
+            $myevents = null;
             foreach ($events as $key => $event) {
                 $event = obj($event);
                 $managers = json_decode($event->managers ?? '[]');
                 $employees = json_decode($event->employees ?? '[]');
-                $unique_employees = array_unique(array_merge($managers,$employees));
-                $am_i_assigned = false;
-                $assigned_as = "NA";
-                if ($myid) {
-                    $am_i_assigned = in_array($myid,$unique_employees);
-                    if(in_array($myid,$managers) && in_array($myid,$employees)){
-                        $assigned_as = "manager, employee";
+                if (in_array($myid, $managers)) {
+                    $unique_employees = array_unique(array_merge($managers, $employees));
+                    $am_i_assigned = false;
+                    $assigned_as = "NA";
+                    if ($myid) {
+                        $am_i_assigned = in_array($myid, $unique_employees);
+                        if (in_array($myid, $managers) && in_array($myid, $employees)) {
+                            $assigned_as = "manager, employee";
+                        } else if (!in_array($myid, $managers) && in_array($myid, $employees)) {
+                            $assigned_as = "employee";
+                        } else if (in_array($myid, $managers) && !in_array($myid, $employees)) {
+                            $assigned_as = "manager";
+                        } else if (!in_array($myid, $managers) && !in_array($myid, $employees)) {
+                            $assigned_as = "NA";
+                            $am_i_assigned = false;
+                        }
                     }
-                    else if(!in_array($myid,$managers) && in_array($myid,$employees)){
-                        $assigned_as = "employee";
-                    }
-                    else if(in_array($myid,$managers) && !in_array($myid,$employees)){
-                        $assigned_as = "manager";
-                    }
-                    else if(!in_array($myid,$managers) && !in_array($myid,$employees)){
-                        $assigned_as = "NA";
-                        $am_i_assigned = false;
-                    }
-                }
-                $unique_employee_count_with_managers = count($unique_employees);
+                    $unique_employee_count_with_managers = count($unique_employees);
 
-                $evenst[] = array(
-                    'id' => $event->id,
-                    'title' => $event->title,
-                    'logo' => img_or_null($event->banner),
-                    'address' => $event->address,
-                    'event_datetime' => strval(strtotime($event->event_date." ".$event->event_time)),
-                    'number_of_employees' => $unique_employee_count_with_managers,
-                    'am_i_assigned' => $am_i_assigned,
-                    'assgined_as' => $assigned_as,
-                );
+                    $myevents[] = array(
+                        'id' => $event->id,
+                        'title' => $event->title,
+                        'logo' => img_or_null($event->banner),
+                        'address' => $event->address,
+                        'event_datetime' => strval(strtotime($event->event_date . " " . $event->event_time)),
+                        'number_of_employees' => $unique_employee_count_with_managers,
+                        'am_i_assigned' => $am_i_assigned,
+                        'assgined_as' => $assigned_as,
+                    );
+                }
             }
-            return  $evenst;
+            return  $myevents;
         }
         return null;
     }
