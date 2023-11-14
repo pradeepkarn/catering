@@ -45,7 +45,7 @@ class Event_api
             echo json_encode($api);
         }
     }
-    function get_event_details($req = null)
+    function get_event_employees($req = null)
     {
         $req = obj($req);
         header('Content-Type: application/json');
