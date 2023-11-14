@@ -121,7 +121,8 @@ class QR_api
             echo json_encode($api);
             exit;
         }
-        $event = $this->get_event_by_id($req->event_id);
+        $emp_id = $req->employee_id??null;
+        $event = $this->get_event_by_id($req->event_id,$emp_id);
         if (!$event) {
             msg_set('Event not found or it might be closed');
             $api['success'] = false;
@@ -180,10 +181,13 @@ class QR_api
             exit;
         }
     }
-    function get_event_by_id($id) {
+    function get_event_by_id($id,$emp_id) {
         $this->db->tableName = 'content';
         $arr['is_active'] = 1;
         $arr['content_group'] = 'event';
+        if ($emp_id) {
+            $arr['user_id'] = $emp_id;
+        }
         $arr['id'] = $id;
         $event = $this->db->findOne($arr);
         if ($event) {
