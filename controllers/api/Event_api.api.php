@@ -38,7 +38,7 @@ class Event_api
             echo json_encode($api);
             exit;
         } else {
-            msg_set('Event not found or it might be closed');
+            msg_set('Event not found or it might be closed or you may not be assigned');
             $api['success'] = false;
             $api['data'] =  null;
             $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
