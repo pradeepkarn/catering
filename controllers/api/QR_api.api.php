@@ -122,7 +122,7 @@ class QR_api
             exit;
         }
         $emp_id = $req->employee_id??null;
-        $event = $this->get_event_by_id($req->event_id,$emp_id);
+        $event = $this->get_event_by_id($req->event_id);
         if (!$event) {
             msg_set('Event not found or it might be closed');
             $api['success'] = false;
@@ -145,6 +145,9 @@ class QR_api
                 $this->db->tableName = 'qr_scan_data';
                 $arr['is_active'] = 1;
                 $arr['event_id'] = $event->id;
+                if ($emp_id) {
+                    $arr['user_id'] = $emp_id;
+                }
                 $reports = $this->db->filter($arr);
                 if ($reports) {
                     $dta = [];
@@ -181,13 +184,10 @@ class QR_api
             exit;
         }
     }
-    function get_event_by_id($id,$emp_id) {
+    function get_event_by_id($id) {
         $this->db->tableName = 'content';
         $arr['is_active'] = 1;
         $arr['content_group'] = 'event';
-        if ($emp_id) {
-            $arr['user_id'] = $emp_id;
-        }
         $arr['id'] = $id;
         $event = $this->db->findOne($arr);
         if ($event) {
