@@ -156,6 +156,8 @@ class QR_api
                         $rprts['scan_datetime'] = strtotime($rprts['scan_date']." ".$rprts['scan_time']);
                         unset($rprts['created_at']);
                         unset($rprts['updated_at']);
+                        unset($rprts['scan_date']);
+                        unset($rprts['scan_time']);
                         $dta[] = $rprts;
                     }
                     msg_set('Reports fetched successfully');
