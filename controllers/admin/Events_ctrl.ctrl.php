@@ -506,7 +506,7 @@ class Events_ctrl
     }
     // emplyeelist
     function user_list() {
-        return $this->db->show("select id, email, username, first_name, last_name from pk_user where is_active=1 and user_group='caterer';");
+        return $this->db->show("select id, email, username, first_name, last_name from pk_user where is_active=1 and user_group='employee';");
     }
     // render function
     public function render_main($context = null)

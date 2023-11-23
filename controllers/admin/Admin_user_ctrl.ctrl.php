@@ -182,6 +182,22 @@ class Admin_user_ctrl
             $arr['nid_no'] = sanitize_remove_tags($request->nid_no);
             // $arr['dl_no'] = sanitize_remove_tags($request->dl_no);
             // $arr['vhcl_no'] = sanitize_remove_tags($request->vhcl_no);
+            if (isset($request->position)) {
+                $arr['position'] = $request->position;
+            }
+            if (isset($request->mobile)) {
+                $arr['mobile'] = intval($request->mobile);
+            }
+            if (isset($request->isd_code)) {
+                $arr['isd_code'] = intval(str_replace("+","",$request->isd_code));
+            }
+            if (isset($request->country)) {
+                $arr['country'] = $request->country;
+            }
+            if (isset($request->company)) {
+                $arr['company'] = $request->company;
+            }
+            
             $arr['password'] = md5($request->password);
             if (isset($request->bio)) {
                 $arr['bio'] = sanitize_remove_tags($request->bio);
@@ -321,6 +337,24 @@ class Admin_user_ctrl
 
             $arr['first_name'] = sanitize_remove_tags($request->first_name);
             $arr['last_name'] = sanitize_remove_tags($request->last_name);
+            if (isset($request->position)) {
+                $arr['position'] = $request->position;
+            }
+            if (isset($request->mobile)) {
+                $arr['mobile'] = intval($request->mobile);
+            }
+            if (isset($request->isd_code)) {
+                $arr['isd_code'] = intval(str_replace("+","",$request->isd_code));
+            }
+            if (isset($request->country)) {
+                $arr['country'] = $request->country;
+            }
+            if (isset($request->company)) {
+                $arr['company'] = $request->company;
+            }
+            
+            
+           
 
 
             if (isset($request->password) && $request->password != "") {

@@ -101,18 +101,36 @@
   </li>
   <!-- user components -->
   <li class="nav-item">
-    <a class="nav-link collapsed" data-bs-target="#components-users" data-bs-toggle="collapse" href="#">
-      <i class="bi bi-menu-button-wide"></i><span>Caterers</span><i class="bi bi-chevron-down ms-auto"></i>
+    <a class="nav-link collapsed" data-bs-target="#components-employees" data-bs-toggle="collapse" href="#">
+      <i class="bi bi-menu-button-wide"></i><span>Employees</span><i class="bi bi-chevron-down ms-auto"></i>
     </a>
-    <ul id="components-users" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+    <ul id="components-employees" class="nav-content collapse " data-bs-parent="#sidebar-nav">
       <li>
-        <a href="/<?php echo home . route('userCreate', ['ug' => 'caterer']); ?>">
-          <i class="bi bi-circle"></i><span>Add Caterer</span>
+        <a href="/<?php echo home . route('userCreate', ['ug' => 'employee']); ?>">
+          <i class="bi bi-circle"></i><span>Add Employee</span>
         </a>
       </li>
       <li>
-        <a href="/<?php echo home . route('userList', ['ug' => 'caterer']); ?>">
-          <i class="bi bi-circle"></i><span>All Caterers</span>
+        <a href="/<?php echo home . route('userList', ['ug' => 'employee']); ?>">
+          <i class="bi bi-circle"></i><span>All Employees</span>
+        </a>
+      </li>
+    </ul>
+  </li>
+  <!-- add sub admin -->
+  <li class="nav-item">
+    <a class="nav-link collapsed" data-bs-target="#components-subadmins" data-bs-toggle="collapse" href="#">
+      <i class="bi bi-menu-button-wide"></i><span>Subadmins</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="components-subadmins" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+      <li>
+        <a href="/<?php echo home . route('userCreate', ['ug' => 'subadmin']); ?>">
+          <i class="bi bi-circle"></i><span>Add subadmin</span>
+        </a>
+      </li>
+      <li>
+        <a href="/<?php echo home . route('userList', ['ug' => 'subadmin']); ?>">
+          <i class="bi bi-circle"></i><span>All Subadmins</span>
         </a>
       </li>
     </ul>
