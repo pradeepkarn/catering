@@ -41,6 +41,11 @@ $req = $context->req;
             <div id="res"></div>
             <div class="row">
                 <div class="col-md-8">
+                    <?php
+                    $auth = new Auth();
+                    $permsns = $auth->permissions('employee');
+                    // myprint($permsns);
+                    ?>
                     <div class="row">
                         <div class="col-md-8">
                             <h4>Email</h4>
@@ -58,7 +63,7 @@ $req = $context->req;
                             <h4>Lats name</h4>
                             <input type="text" name="last_name" class="form-control my-3" placeholder="Last name">
                         </div>
-                        <?php if ($req->ug == 'employee') : ?>
+                        <?php if ($req->ug == 'employee' || $req->ug == 'manager') : ?>
 
                             <div class="col-md-6 my-2">
                                 <label for="">IQMA NUMBER.</label>
@@ -70,14 +75,50 @@ $req = $context->req;
                             </div>
                             <div class="col-md-6 my-2">
                                 <label for="">Nationality</label>
-                                <input type="text" name="country" class="form-control">
+                                  <!-- Input for search -->
+                                  <style>
+                                    /* Apply the height to the select within #isdCodeSearchContainer */
+                                    .select2-selection--single,
+                                    #mobileInput {
+                                        height: 40px !important;
+                                        width: 100% !important;
+                                    }
+                                </style>
+                                <div id="countryCodeContainer"></div>
+                                <select id="countryCodeSearch" class="form-select">
+                                    <?php
+                                    $isdjsn = jsonData("/dial-codes/std-code.json");
+                                    $isdcodes = json_decode($isdjsn);
+                                    foreach ($isdcodes as $key => $cd) {
+                                        $isdcode = str_replace("+", "", $cd->dial_code);
+                                    ?>
+                                        <option value="<?php echo $cd->name; ?>"><?php echo $cd->name; ?></option>
+                                    <?php } ?>
+                                </select>
+                                <script>
+                                    $(document).ready(function() {
+                                       
+                                        // Initialize Select2 on the ISD code search input
+                                        $('#countryCodeSearch').select2({
+                                            placeholder: 'Search for ISD code',
+                                            data: <?php echo $isdjsn; ?>
+                                        });
+                                        // Handle search functionality
+                                        $('#countryCodeSearch').on('change', function() {
+                                            let selectedCode = $(this).val();
+                                            // Add the selected value to the form data
+                                            $("#countryCodeContainer").html('<input type="hidden" name="country" value="' + selectedCode + '">');
+                                        });
+                                    });
+                                </script>
                             </div>
-                            <div class="col-md-6 my-2" id="postioncont">
+                            <div class="col-md-6 my-2">
+                                <div id="postioncont"></div>
                                 <label for="">Position</label>
                                 <select id="positions" class="form-select">
                                     <?php
                                     $positions = POSITIONS;
-                                    $posjsn = json_encode($positions);
+                                    $posjsn = json_encode(array_flip($positions));
                                     foreach ($positions as $key => $cd) {
                                     ?>
                                         <option value="<?php echo $key; ?>"><?php echo $key . "-" . $cd; ?></option>
@@ -95,7 +136,7 @@ $req = $context->req;
                                         $('#positions').on('change', function() {
                                             var selectedCode = $(this).val();
                                             // Add the selected value to the form data
-                                            $("#postioncont").append('<input type="hidden" name="position" value="' + selectedCode + '">');
+                                            $("#postioncont").html('<input type="hidden" name="position" value="' + selectedCode + '">');
                                         });
                                     });
                                 </script>
@@ -115,7 +156,6 @@ $req = $context->req;
 
                             <div class="col-md-2 my-2">
                                 <label for="isdCode">ISD Code</label>
-                                <!-- Input for search -->
                                 <style>
                                     /* Apply the height to the select within #isdCodeSearchContainer */
                                     .select2-selection--single,
@@ -142,14 +182,13 @@ $req = $context->req;
                                             placeholder: 'Search for ISD code',
                                             data: <?php echo $isdjsn; ?>
                                         });
-                                          // Handle search functionality
-                                          $('#isdCodeSearch').on('change', function() {
+                                        // Handle search functionality
+                                        $('#isdCodeSearch').on('change', function() {
                                             let selectedCode = $(this).val();
                                             // Add the selected value to the form data
-                                            $("#isdcodecontainer").append('<input type="hidden" name="isd_code" value="' + selectedCode + '">');
+                                            $("#isdcodecontainer").html('<input type="hidden" name="isd_code" value="' + selectedCode + '">');
                                         });
                                     });
-
                                 </script>
                             </div>
 

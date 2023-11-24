@@ -2,7 +2,8 @@
 $event_detail = $context->event_detail;
 $pd = obj($event_detail);
 $catlist = $context->cat_list;
-$user_list = $context->user_list;
+$employee_list = $context->employee_list;
+$manager_list = $context->manager_list;
 $managers = json_decode($pd->managers ?? '[]', true) ?? [];
 $employees = json_decode($pd->employees ?? '[]', true) ?? [];
 $meta_tags = null;
@@ -55,6 +56,11 @@ if ($pd->json_obj != "") {
             <div id="res"></div>
             <div class="row">
                 <div class="col-md-8">
+                    <?php 
+                    $evnt = new Events_ctrl;
+                    $data = $evnt->generate_excel($content_id=$pd->id);
+                    // myprint($data);
+                    ?>
                     <h4>Title</h4>
                     <input type="text" name="title" value="<?php echo $pd->title; ?>" class="form-control my-3" placeholder="Title">
                     <h6>Slug</h6>
@@ -73,7 +79,7 @@ if ($pd->json_obj != "") {
                     <hr>
                     <b>Managers:</b>
                     <ol>
-                        <?php foreach ($user_list as $key => $emp) :
+                        <?php foreach ($manager_list as $key => $emp) :
                             $emp = obj($emp);
                         ?>
                             <?php echo in_array($emp->id, $managers) ? "<li>{$emp->first_name} {$emp->last_name}</li>"  : null; ?>
@@ -83,7 +89,7 @@ if ($pd->json_obj != "") {
                     <ol>
                         <?php
                         $emp = null;
-                        foreach ($user_list as $key => $emp) :
+                        foreach ($employee_list as $key => $emp) :
                             $emp = obj($emp);
                         ?>
                             <?php
@@ -127,7 +133,7 @@ if ($pd->json_obj != "") {
                         <ul class="dropdown-menu w-100" aria-labelledby="managerDropdown">
                             <?php
                             $emp = null;
-                            foreach ($user_list as $key => $emp) :
+                            foreach ($manager_list as $key => $emp) :
                                 $emp = obj($emp);
                                 // if (!in_array($emp->id, $managers)) {
                             ?>
@@ -152,7 +158,7 @@ if ($pd->json_obj != "") {
                         <ul class="dropdown-menu w-100" aria-labelledby="employeeDropdown">
                             <?php
                             $emp = null;
-                            foreach ($user_list as $key => $emp) :
+                            foreach ($employee_list as $key => $emp) :
                                 $emp = obj($emp);
                                 // if (!in_array($emp->id, $employees)) {
                             ?>

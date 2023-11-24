@@ -100,6 +100,24 @@
     </ul>
   </li>
   <!-- user components -->
+  
+  <li class="nav-item">
+    <a class="nav-link collapsed" data-bs-target="#components-managers" data-bs-toggle="collapse" href="#">
+      <i class="bi bi-menu-button-wide"></i><span>Managers</span><i class="bi bi-chevron-down ms-auto"></i>
+    </a>
+    <ul id="components-managers" class="nav-content collapse " data-bs-parent="#sidebar-nav">
+      <li>
+        <a href="/<?php echo home . route('userCreate', ['ug' => 'manager']); ?>">
+          <i class="bi bi-circle"></i><span>Add Manager</span>
+        </a>
+      </li>
+      <li>
+        <a href="/<?php echo home . route('userList', ['ug' => 'manager']); ?>">
+          <i class="bi bi-circle"></i><span>All Managers</span>
+        </a>
+      </li>
+    </ul>
+  </li>
   <li class="nav-item">
     <a class="nav-link collapsed" data-bs-target="#components-employees" data-bs-toggle="collapse" href="#">
       <i class="bi bi-menu-button-wide"></i><span>Employees</span><i class="bi bi-chevron-down ms-auto"></i>
@@ -117,6 +135,7 @@
       </li>
     </ul>
   </li>
+  <?php if(is_superuser()): ?>
   <!-- add sub admin -->
   <li class="nav-item">
     <a class="nav-link collapsed" data-bs-target="#components-subadmins" data-bs-toggle="collapse" href="#">
@@ -135,6 +154,7 @@
       </li>
     </ul>
   </li>
+  <?php endif; ?>
  
   <!-- events components -->
   <li class="nav-item">

@@ -16,7 +16,8 @@ class Events_ctrl
             'data' => (object) array(
                 'req' => obj($req),
                 'cat_list' => $this->cat_list(limit: 100),
-                'user_list'=> $this->user_list('caterer')
+                'employee_list' => $this->user_list('employee'),
+                'manager_list' => $this->user_list('manager')
             )
         );
         $this->render_main($context);
@@ -115,7 +116,8 @@ class Events_ctrl
                 'event_detail' => $this->event_detail($req->id),
                 'cat_list' => $this->cat_list(limit: 1000),
                 'reviewdata' => $reviewdata,
-                'user_list'=> $this->user_list('caterer')
+                'employee_list' => $this->user_list('employee'),
+                'manager_list' => $this->user_list('manager')
             )
         );
         $this->render_main($context);
@@ -158,25 +160,26 @@ class Events_ctrl
             $json_arr['meta']['description'] = $request->meta_description;
         }
         if (isset($request->title)) {
-           
+
             $arr = null;
             $arr['json_obj'] = json_encode($json_arr);
             $arr['content_group'] = "event";
             $arr['title'] = $request->title;
             $arr['slug'] = generate_slug(trim($request->slug));
-           
+
             $arr['city'] = $request->city;
             $arr['content'] = $request->content;
-         
+
             $arr['created_at'] = date('Y-m-d H:i:s');
-            
+            $arr['created_by'] = USER['id'];
+
             $arr['event_date'] = $request->event_date;
             $arr['event_time'] = $request->event_time;
             $arr['address'] = $request->address;
-            $arr['lat'] = $request->lat??null;
-            $arr['lon'] = $request->lon??null;
-            $arr['managers'] = json_encode($request->managers??'[]')??json_encode([]);
-            $arr['employees'] = json_encode($request->employees??'[]')??json_encode([]);
+            $arr['lat'] = $request->lat ?? null;
+            $arr['lon'] = $request->lon ?? null;
+            $arr['managers'] = json_encode($request->managers ?? []);
+            $arr['employees'] = json_encode($request->employees ?? []);
             $moreimg = [];
             if (isset($_FILES['moreimgs'])) {
                 $fl = $_FILES['moreimgs'];
@@ -284,22 +287,22 @@ class Events_ctrl
             $arr['content_group'] = "event";
             $arr['title'] = $request->title;
             $arr['slug'] = generate_slug(trim($request->slug));
-           
+
             $arr['city'] = $request->city;
             $arr['content'] = $request->content;
-         
+
             $arr['created_at'] = date('Y-m-d H:i:s');
-            
+
             $arr['event_date'] = $request->event_date;
             $arr['event_time'] = $request->event_time;
             $arr['address'] = $request->address;
-            $arr['lat'] = $request->lat??null;
-            $arr['lon'] = $request->lon??null;
-            $arr['managers'] = json_encode($request->managers??'[]')??json_encode([]);
-            $arr['employees'] = json_encode($request->employees??'[]')??json_encode([]);
+            $arr['lat'] = $request->lat ?? null;
+            $arr['lon'] = $request->lon ?? null;
+            $arr['managers'] = json_encode($request->managers ?? []);
+            $arr['employees'] = json_encode($request->employees ?? []);
             // $mngrjsn = json_decode($content->managers??'[]',true)??[];
             // $emplsjsn = json_decode($content->employees??'[]',true)??[];
-            $imsgjsn = json_decode($content->imgs??'[]',true);
+            $imsgjsn = json_decode($content->imgs ?? '[]', true);
             $moreimg = [];
             if (isset($_FILES['moreimgs'])) {
                 $fl = $_FILES['moreimgs'];
@@ -315,7 +318,7 @@ class Events_ctrl
                         }
                     }
                 }
-                $newimgs = array_merge($imsgjsn,$moreimg);
+                $newimgs = array_merge($imsgjsn, $moreimg);
                 $arr['imgs'] = json_encode($newimgs);
             }
 
@@ -386,7 +389,7 @@ class Events_ctrl
                     $db->update();
                     $pdo->commit();
                     msg_set("Image deleted");
-                    $data['msg'] = msg_ssn(return: true,lnbrk:"\n");
+                    $data['msg'] = msg_ssn(return: true, lnbrk: "\n");
                     $data['success'] = true;
                     $data['data'] = null;
                     echo json_encode($data);
@@ -394,7 +397,7 @@ class Events_ctrl
                 } catch (PDOException $th) {
                     $pdo->rollback();
                     msg_set("Image not deleted");
-                    $data['msg'] = msg_ssn(return: true,lnbrk:"\n");
+                    $data['msg'] = msg_ssn(return: true, lnbrk: "\n");
                     $data['success'] = false;
                     $data['data'] = null;
                     echo json_encode($data);
@@ -403,7 +406,7 @@ class Events_ctrl
             }
         } else {
             msg_set("content not found");
-            $data['msg'] = msg_ssn(return: true,lnbrk:"\n");
+            $data['msg'] = msg_ssn(return: true, lnbrk: "\n");
             $data['success'] = false;
             $data['data'] = null;
             echo json_encode($data);
@@ -505,8 +508,9 @@ class Events_ctrl
         }
     }
     // emplyeelist
-    function user_list() {
-        return $this->db->show("select id, email, username, first_name, last_name from pk_user where is_active=1 and user_group='employee';");
+    function user_list($ug = 'employee')
+    {
+        return $this->db->show("select id, email, username, first_name, last_name from pk_user where is_active=1 and user_group='$ug';");
     }
     // render function
     public function render_main($context = null)
@@ -517,6 +521,9 @@ class Events_ctrl
     public function event_list($ord = "DESC", $limit = 5, $active = 1, $sort_by = 'views')
     {
         $cntobj = new Model('content');
+        if (!is_superuser()) {
+            return $cntobj->filter_index(array('content_group' => 'event', 'is_active' => $active, 'created_by' => USER['id']), $ord, $limit, $change_order_by_col = $sort_by);
+        }
         return $cntobj->filter_index(array('content_group' => 'event', 'is_active' => $active), $ord, $limit, $change_order_by_col = $sort_by);
     }
     public function event_search_list($keyword, $ord = "DESC", $limit = 5, $active = 1)
@@ -528,6 +535,14 @@ class Events_ctrl
         $search_arr['author'] = $keyword;
         // $search_arr['created_at'] = $keyword;
         // $search_arr['updated_at'] = $keyword;
+        if (!is_superuser()) {
+            return $cntobj->search(
+                assoc_arr: $search_arr,
+                ord: $ord,
+                limit: $limit,
+                whr_arr: array('content_group' => 'event', 'is_active' => $active, 'created_by' => USER['id'])
+            );
+        }
         return $cntobj->search(
             assoc_arr: $search_arr,
             ord: $ord,
@@ -545,5 +560,38 @@ class Events_ctrl
     {
         $cntobj = new Model('content');
         return $cntobj->filter_index(array('content_group' => 'product_category', 'is_active' => $active), $ord, $limit);
+    }
+    function generate_excel($content_id)
+    {
+        $db = new Dbobjects;
+
+        $sql = "SELECT id, title, banner, managers, employees FROM content WHERE id = $content_id";
+        $event = $db->showOne($sql);
+        $managers = [];
+        $employees = [];
+
+        if ($event) {
+            $managerIds = json_decode($event['managers'] ?? '[]', true);
+            $employeeIds = json_decode($event['employees'] ?? '[]', true);
+
+            if (is_array($managerIds) && count($managerIds) > 0) {
+                $managerIdsString = implode(",", $managerIds);
+                $sql = "SELECT first_name, last_name, position, company, isd_code, mobile FROM pk_user WHERE id IN ($managerIdsString);";
+                $managers = $db->show($sql);
+            }
+
+            if (is_array($employeeIds) && count($employeeIds) > 0) {
+                $employeeIdsString = implode(",", $employeeIds);
+                $sql = "SELECT first_name, last_name, position, company, isd_code, mobile FROM pk_user WHERE id IN ($employeeIdsString);";
+                $employees = $db->show($sql);
+            }
+
+            $event['managers'] = $managers;
+            $event['employees'] = $employees;
+
+            return $event;
+        } else {
+            return null; // Handle case where no content is found for the given ID
+        }
     }
 }

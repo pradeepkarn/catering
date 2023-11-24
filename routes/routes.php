@@ -51,7 +51,7 @@ function adminAuthMiddleware($next)
         header("Location: /" . home . route('adminLogin'));
         exit;
     }
-    if (!is_superuser()) {
+    if (!is_admin()) {
         // Redirect to login page if admin is not logged in
         header("Location: /" . home . route('adminLogin'));
         exit;

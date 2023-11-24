@@ -38,35 +38,78 @@ $req->ug = $ug;
                             <h4>Lats name</h4>
                             <input type="text" name="last_name" value="<?php echo $ud->last_name; ?>" class="form-control my-3" placeholder="Last name">
                         </div>
-                        <?php if ($req->ug == 'employee') : ?>
+                        <?php if ($req->ug == 'employee' || $req->ug == 'manager') : ?>
                             <div class="col-md-6 my-2">
                                 <label for="">Nationality</label>
-                                <input type="text" name="country" value="<?php echo $ud->country; ?>" class="form-control">
-                            </div>
-                            <div class="col-md-6 my-2" id="postioncont">
-                                <label for="">Position</label>
-                                <select id="positions" class="form-select">
+                                  <!-- Input for search -->
+                                  <style>
+                                    /* Apply the height to the select within #isdCodeSearchContainer */
+                                    .select2-selection--single,
+                                    #mobileInput {
+                                        height: 40px !important;
+                                        width: 100% !important;
+                                    }
+                                </style>
+                                <div id="countryCodeContainer"></div>
+                                <select id="countryCodeSearch" class="form-select">
                                     <?php
-                                    $positions = POSITIONS;
-                                    $posjsn = json_encode($positions);
-                                    foreach ($positions as $key => $cd) {
+                                    $isdjsn = jsonData("/dial-codes/std-code.json");
+                                    $isdcodes = json_decode($isdjsn);
+                                    foreach ($isdcodes as $key => $cd) {
+                                        $isdcode = str_replace("+", "", $cd->dial_code);
                                     ?>
-                                        <option <?php echo "{$ud->position}" == $key ? "selected" : null; ?> value="<?php echo $key; ?>"><?php echo $key . "-" . $cd; ?></option>
+                                        <option <?php echo "{$ud->country}" == "$cd->name" ? "selected" : null; ?> value="<?php echo $cd->name; ?>"><?php echo $cd->name; ?></option>
                                     <?php } ?>
                                 </select>
                                 <script>
                                     $(document).ready(function() {
+                                        let prevIsdCode = "<?php echo "{$ud->country}"; ?>";
+                                        if (prevIsdCode) {
+                                            $('#countryCodeSearch').val(prevIsdCode);
+                                        }
+                                        // Initialize Select2 on the ISD code search input
+                                        $('#countryCodeSearch').select2({
+                                            placeholder: 'Search for ISD code',
+                                            data: <?php echo $isdjsn; ?>
+                                        });
+                                        // Handle search functionality
+                                        $('#countryCodeSearch').on('change', function() {
+                                            let selectedCode = $(this).val();
+                                            // Add the selected value to the form data
+                                            $("#countryCodeContainer").html('<input type="hidden" name="country" value="' + selectedCode + '">');
+                                        });
+                                    });
+                                </script>
+                            </div>
+
+                            <div class="col-md-6 my-2">
+                                <div id="postioncont"></div>
+                                <label for="">Position</label>
+                                <select id="positions" class="form-select">
+                                    <?php
+                                    $positions = POSITIONS;
+                                    $posjsn = json_encode(array_flip($positions));
+                                    foreach ($positions as $key => $cd) {
+                                    ?>
+                                        <option <?php echo $ud->position == $key ? "selected" : null; ?> value="<?php echo $key; ?>"><?php echo $key . "-" . $cd; ?></option>
+                                    <?php } ?>
+                                </select>
+                                <script>
+                                    $(document).ready(function() {
+                                        let previouslySelected = "<?php echo isset($ud->position) ? $ud->position : 0; ?>";
                                         // Initialize Select2 on the ISD code search input
                                         $('#positions').select2({
                                             placeholder: 'Search Position',
                                             data: <?php echo $posjsn; ?>
                                         });
-
+                                        if (previouslySelected) {
+                                            $('#positions').val(previouslySelected);
+                                        }
                                         // Handle search functionality
                                         $('#positions').on('change', function() {
                                             var selectedCode = $(this).val();
                                             // Add the selected value to the form data
-                                            $("#postioncont").append('<input type="hidden" name="position" value="' + selectedCode + '">');
+                                            $("#postioncont").html('<input type="hidden" name="position" value="' + selectedCode + '">');
                                         });
                                     });
                                 </script>
@@ -108,19 +151,22 @@ $req->ug = $ug;
                                 </select>
                                 <script>
                                     $(document).ready(function() {
+                                        let prevIsdCode = "<?php echo "+{$ud->isd_code}"; ?>";
+                                        if (prevIsdCode) {
+                                            $('#isdCodeSearch').val(prevIsdCode);
+                                        }
                                         // Initialize Select2 on the ISD code search input
                                         $('#isdCodeSearch').select2({
                                             placeholder: 'Search for ISD code',
                                             data: <?php echo $isdjsn; ?>
                                         });
-                                          // Handle search functionality
-                                          $('#isdCodeSearch').on('change', function() {
+                                        // Handle search functionality
+                                        $('#isdCodeSearch').on('change', function() {
                                             let selectedCode = $(this).val();
                                             // Add the selected value to the form data
-                                            $("#isdcodecontainer").append('<input type="hidden" name="isd_code" value="' + selectedCode + '">');
+                                            $("#isdcodecontainer").html('<input type="hidden" name="isd_code" value="' + selectedCode + '">');
                                         });
                                     });
-
                                 </script>
                             </div>
 

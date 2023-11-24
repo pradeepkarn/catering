@@ -417,7 +417,8 @@ class Auth extends Main_ctrl
         $user = $userObj->filter_index(array('username' => $uniqcol, 'password' => md5($password)));
         if (count($user) == 1) {
             $user = obj($user[0]);
-            if (!user_group($user, $ug)) {
+            $matchuser = in_array($user->user_group,['admin','subadmin']);
+            if (!$matchuser) {
                 $_SESSION['msg'][] = 'Invalid login portal';
                 msg_ssn("msg");
                 return false;
@@ -488,6 +489,7 @@ class Auth extends Main_ctrl
         } else {
             $role = false;
         }
+        $isadmin = is_admin();
         // Unset all session values
         $_SESSION = array();
         // Destroy the session cookie
@@ -499,7 +501,7 @@ class Auth extends Main_ctrl
         }
         // Destroy the session
         session_destroy();
-        if ($role == 'superuser') {
+        if ($isadmin) {
             header("Location: /" . home . route('adminLogin'));
             exit;
         }
@@ -543,7 +545,7 @@ class Auth extends Main_ctrl
     }
     public function admin_login_page($req = null)
     {
-        if (is_superuser()) {
+        if (is_admin()) {
             header("Location: /" . home . route('adminhome'));
             exit;
         }
@@ -559,7 +561,7 @@ class Auth extends Main_ctrl
     {
         $rules = [
             'username' => 'required|string',
-            'password' => 'required|string|min:6|max:20'
+            'password' => 'required|string'
         ];
         $pass = validateData(data: $_POST, rules: $rules);
         if ($pass) {
@@ -596,5 +598,14 @@ class Auth extends Main_ctrl
     public function render_main($context = null)
     {
         import("apps/view/layouts/main.php", $context);
+    }
+    function permissions($cg=null) {
+        $permissions = USER['permissions']?json_decode(USER['permissions']):[];
+        if ($cg) {
+           $cg = "AND content_group = '$cg'";
+        }
+        $permissions = implode(",",$permissions);
+        $sql = "select * from permissions where permissions.id IN ($permissions)  $cg";
+        return (new Dbobjects)->show($sql);
     }
 }

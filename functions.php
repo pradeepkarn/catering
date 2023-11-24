@@ -69,6 +69,15 @@ function register()
     }
   }
 }
+function is_admin()
+{
+  if (!authenticate()) {
+    return false;
+  }
+  $account = new Account();
+  $user = $account->getLoggedInAccount();
+  return in_array($user['user_group'],ADMIN_GROUP_LIST);
+}
 function is_superuser()
 {
   $account = new Account();

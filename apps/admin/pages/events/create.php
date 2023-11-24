@@ -1,7 +1,8 @@
 <?php
 $createData = $context;
 $catlist = $context->cat_list;
-$user_list = $context->user_list;
+$employee_list = $context->employee_list;
+$manager_list = $context->manager_list;
 ?>
 
 <form action="/<?php echo home . route('eventStoreAjax'); ?>" id="save-new-page-form">
@@ -41,7 +42,7 @@ $user_list = $context->user_list;
                             Select Managers
                         </button>
                         <ul class="dropdown-menu w-100" aria-labelledby="managerDropdown">
-                            <?php foreach ($user_list as $key => $emp) :
+                            <?php foreach ($manager_list as $key => $emp) :
                                 $emp = obj($emp);
                             ?>
                                 <li class="px-2 py-2">
@@ -59,7 +60,7 @@ $user_list = $context->user_list;
                             Select Employees
                         </button>
                         <ul class="dropdown-menu w-100" aria-labelledby="employeeDropdown">
-                            <?php foreach ($user_list as $key => $emp) :
+                            <?php foreach ($employee_list as $key => $emp) :
                                 $emp = obj($emp);
                             ?>
                                 <li class="px-2 py-2">
