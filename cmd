@@ -90,9 +90,9 @@ function generate_excel_from_data($event)
             $sheet->setCellValue($cellCoordinate, $attenedence);
             if ($attend) {
                 $sheet->getStyle($cellCoordinate)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00'); // Yellow
-                $sheet->getStyle($cellCoordinate)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $attendence_count += 1;
             }
+            $sheet->getStyle($cellCoordinate)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         }
         $sheet->setCellValue('AP' . $row, $attendence_count);
         $attendence_count = 0;
