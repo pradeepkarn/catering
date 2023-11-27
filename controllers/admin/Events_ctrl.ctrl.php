@@ -615,7 +615,12 @@ class Events_ctrl
 
     function get_emp_scandata($db, $empid)
     {
-        $sql = "select * from qr_scan_data where user_id = '$empid'";
+        // $sql = "select * from qr_scan_data where user_id = '$empid'";
+        $sql = "SELECT MAX(created_at) as latest_created_at, scan_date, user_id, scan_data, scan_time, scanned_by, updated_at, is_active, event_id, scan_group, food_category
+        FROM qr_scan_data
+        WHERE user_id = '$empid'
+        GROUP BY scan_date;
+        ";
         return $db->show($sql);
     }
 }
