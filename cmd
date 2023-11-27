@@ -87,7 +87,8 @@ function generate_excel_from_data($event)
 
 $event = new Events_ctrl;
 $data = $event->generate_excel($content_id = 33717);
-
+print_r($data);
+return;
 // Call the function to generate Excel from data
 generate_excel_from_data($data = $data);
 exit;
