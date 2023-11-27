@@ -78,8 +78,8 @@ function generate_excel_from_data($event)
         $sheet->setCellValue('H' . $row, "");
         $sheet->setCellValue('I' . $row, "");
         $sheet->setCellValue('J' . $row, $employee['food_category']);
+        $attendence_count = 0;
         for ($i = 0; $i < 31; $i++) {
-            $attendence_count = 0;
             $attend = in_array($i+1,$days);
             $attenedence = $attend?"P":"A";
             $sheet->setCellValue(Coordinate::stringFromColumnIndex(11 + $i) . $row, $attenedence);
