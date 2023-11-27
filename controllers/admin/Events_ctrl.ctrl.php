@@ -561,8 +561,9 @@ class Events_ctrl
         $cntobj = new Model('content');
         return $cntobj->filter_index(array('content_group' => 'product_category', 'is_active' => $active), $ord, $limit);
     }
-    function generate_excel($db,$content_id)
+    function generate_excel($content_id)
     {
+        $db = new Dbobjects;
         $sql = "SELECT id, title, banner, managers, employees FROM content WHERE id = $content_id";
         $event = $db->showOne($sql);
         $managers = [];
