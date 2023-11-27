@@ -107,6 +107,7 @@ class QR_api
                 exit;
             }
         } else {
+            msg_set("Invalid user token");
             $api['success'] = false;
             $api['data'] = null;
             $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
