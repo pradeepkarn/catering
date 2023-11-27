@@ -54,16 +54,16 @@ function generate_excel_from_data($event)
 
     // Set data
     $row = 2; // Start from row 2
-    $emps = array_merge($event['employees'], $event['managers']);
-    foreach ($emps as $key => $employee) {
+    // $emps = array_merge($event['employees'], $event['managers']);
+    foreach ($event['employees'] as $key => $employee) {
         $mobile = strval($employee['isd_code'] . $employee['mobile']);
         $days = [];
-        if (isset($emps['attendence'])) {
-            foreach ($emps['attendence'] as $key => $atn) {
+        if (isset($employee['attendence'])) {
+            foreach ($employee['attendence'] as $key => $atn) {
                 $days[] = $atn['day'];
             }
         }
-        print_r($days);
+        // print_r($employee['attendence']);
 
         $color = $row % 2 == 0 ?  'FFFFFF' : 'D3D3D3'; // Alternate row colors (yellow and white)
         $sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
@@ -95,8 +95,8 @@ function generate_excel_from_data($event)
 
 $event = new Events_ctrl;
 $data = $event->generate_excel($content_id = 33717);
-// print_r($data);
-// return;
+print_r($data);
+return;
 // Call the function to generate Excel from data
 generate_excel_from_data($data = $data);
 exit;
