@@ -145,14 +145,14 @@ $req = $context->req;
                                 <label for="">Company</label>
                                 <input type="text" name="company" class="form-control">
                             </div>
-                            <div class="col-md-6 my-2">
+                            <!-- <div class="col-md-6 my-2">
                                 <label for="">IQMA ID No.</label>
                                 <input type="text" name="nid_no" class="form-control">
-                            </div>
-                            <div class="col-md-6 my-2">
+                            </div> -->
+                            <!-- <div class="col-md-6 my-2">
                                 <label for="">IQM ID DOC (PDF)</label>
                                 <input accept="application/pdf" type="file" name="nid_doc" class="form-control">
-                            </div>
+                            </div> -->
 
                             <div class="col-md-2 my-2">
                                 <label for="isdCode">ISD Code</label>
