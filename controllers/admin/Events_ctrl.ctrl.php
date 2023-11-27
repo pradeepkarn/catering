@@ -590,13 +590,11 @@ class Events_ctrl
                 $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
                 $mngr['food_category'] = getTextFromCode(2,FOOD_CATEGORY);
                 $scandata = $this->get_emp_scandata($db, $empid = $mngr['id']);
-                $days=[];
-                $mngr['attendence'] = array_map(function ($sd) use($days){
+                $mngr['attendence'] = array_map(function ($sd) {
                     $sd['scan_data'] = json_decode($sd['scan_data']);
-                    $days[] = date("d",strtotime($sd['scan_date']));
+                    $sd['day'] = date("d",strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
-                $mngr['days'] = $days;
                 return $mngr;
             }, $managers);
 
@@ -604,13 +602,11 @@ class Events_ctrl
                 $emp['position'] = getTextFromCode($emp['position'], POSITIONS);
                 $scandata = $this->get_emp_scandata($db, $empid = $emp['id']);
                 $emp['food_category'] = getTextFromCode(1,FOOD_CATEGORY);
-                $days=[];
-                $emp['attendence'] = array_map(function ($sd) use($days) {
+                $emp['attendence'] = array_map(function ($sd) {
                     $sd['scan_data'] = json_decode($sd['scan_data']);
-                    $days[] = date("d",strtotime($sd['scan_date']));
+                    $sd['day'] = date("d",strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
-                $emp['days'] = $days;
                 return $emp;
             }, $employees);
             return $event;
