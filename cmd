@@ -63,7 +63,7 @@ function generate_excel_from_data($event)
                 $days[] = $atn['day'];
             }
         }
-        // print_r($employee['attendence']);
+        print_r($days);
 
         $color = $row % 2 == 0 ?  'FFFFFF' : 'D3D3D3'; // Alternate row colors (yellow and white)
         $sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
@@ -95,8 +95,8 @@ function generate_excel_from_data($event)
 
 $event = new Events_ctrl;
 $data = $event->generate_excel($content_id = 33717);
-print_r($data);
-return;
+// print_r($data);
+// return;
 // Call the function to generate Excel from data
 generate_excel_from_data($data = $data);
 exit;
