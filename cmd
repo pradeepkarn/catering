@@ -63,6 +63,7 @@ function generate_excel_from_data($event)
                 $days[] = $atn['day'];
             }
         }
+        print_r($emps);
 
         $color = $row % 2 == 0 ?  'FFFFFF' : 'D3D3D3'; // Alternate row colors (yellow and white)
         $sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
@@ -78,12 +79,12 @@ function generate_excel_from_data($event)
         $sheet->setCellValue('I' . $row, "");
         $sheet->setCellValue('J' . $row, $employee['food_category']);
         for ($i = 0; $i < 31; $i++) {
-            $sheet->setCellValue(Coordinate::stringFromColumnIndex(11 + $i) . '1', $i + 1);
+            $attenedence = in_array($i+1,$days)?"P":"A";
+            $sheet->setCellValue(Coordinate::stringFromColumnIndex(11 + $i) . $row, $attenedence);
         }
         $sheet->setCellValue('AP' . $row, 0);
         $row++;
     }
-
 
     // Save the Excel file
     $writer = new Xlsx($spreadsheet);
@@ -94,8 +95,8 @@ function generate_excel_from_data($event)
 
 $event = new Events_ctrl;
 $data = $event->generate_excel($content_id = 33717);
-print_r($data);
-return;
+// print_r($data);
+// return;
 // Call the function to generate Excel from data
 generate_excel_from_data($data = $data);
 exit;
