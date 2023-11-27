@@ -575,38 +575,42 @@ class Events_ctrl
 
             if (is_array($managerIds) && count($managerIds) > 0) {
                 $managerIdsString = implode(",", $managerIds);
-                $sql = "SELECT id,first_name, last_name, position, company, country, isd_code, mobile FROM pk_user WHERE id IN ($managerIdsString);";
+                $sql = "SELECT id,first_name, last_name, position, company, country, isd_code, mobile, nid_no FROM pk_user WHERE id IN ($managerIdsString);";
                 $managers = $db->show($sql);
             }
 
             if (is_array($employeeIds) && count($employeeIds) > 0) {
                 $employeeIdsString = implode(",", $employeeIds);
-                $sql = "SELECT id,first_name, last_name, position, company, country, isd_code, mobile FROM pk_user WHERE id IN ($employeeIdsString);";
+                $sql = "SELECT id,first_name, last_name, position, company, country, isd_code, mobile, nid_no FROM pk_user WHERE id IN ($employeeIdsString);";
                 $employees = $db->show($sql);
             }
 
             // Corrected the array_map function and variable names
             $event['managers'] = array_map(function ($mngr) use ($db) {
                 $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
+                $mngr['food_category'] = getTextFromCode(2,FOOD_CATEGORY);
                 $scandata = $this->get_emp_scandata($db, $empid = $mngr['id']);
-                $mngr['attendence'] = array_map(function ($sd) {
+                $days=[];
+                $mngr['attendence'] = array_map(function ($sd) use($days){
                     $sd['scan_data'] = json_decode($sd['scan_data']);
-                    $sd['food_category'] = getTextFromCode($sd['food_category'],FOOD_CATEGORY);
-                    $sd['day'] = date("d",strtotime($sd['scan_date']));
+                    $days[] = date("d",strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
+                $mngr['days'] = $days;
                 return $mngr;
             }, $managers);
 
             $event['employees'] = array_map(function ($emp) use ($db) {
                 $emp['position'] = getTextFromCode($emp['position'], POSITIONS);
                 $scandata = $this->get_emp_scandata($db, $empid = $emp['id']);
-                $emp['attendence'] = array_map(function ($sd) {
+                $emp['food_category'] = getTextFromCode(1,FOOD_CATEGORY);
+                $days=[];
+                $emp['attendence'] = array_map(function ($sd) use($days) {
                     $sd['scan_data'] = json_decode($sd['scan_data']);
-                    $sd['food_category'] = getTextFromCode($sd['food_category'],FOOD_CATEGORY);
-                    $sd['day'] = date("d",strtotime($sd['scan_date']));
+                    $days[] = date("d",strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
+                $emp['days'] = $days;
                 return $emp;
             }, $employees);
             return $event;
