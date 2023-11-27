@@ -561,7 +561,7 @@ class Events_ctrl
         $cntobj = new Model('content');
         return $cntobj->filter_index(array('content_group' => 'product_category', 'is_active' => $active), $ord, $limit);
     }
-    function event_data($content_id)
+    function generate_excel($content_id)
     {
         $db = new Dbobjects;
 
@@ -586,42 +586,20 @@ class Events_ctrl
                 $employees = $db->show($sql);
             }
 
-            $event['managers'] = $managers;
-            $event['employees'] = $employees;
+            // Corrected the array_map function and variable names
+            $event['managers'] = array_map(function ($mngr) {
+                $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
+                return $mngr;
+            }, $managers);
+
+            $event['employees'] = array_map(function ($emp) {
+                $emp['position'] = getTextFromCode($emp['position'], POSITIONS);
+                return $emp;
+            }, $employees);
 
             return $event;
         } else {
             return null; // Handle case where no content is found for the given ID
         }
-    }
-    function generate_excel($content_id)
-    {
-        $data = $this->event_data($content_id);
-
-        $returnarr = [];
-        foreach ($data as $key => $ed) {
-            $managers = [];
-            $employees = [];
-
-            if (isset($ed['managers']) && is_array($ed['managers'])) {
-                foreach ($ed['managers'] as $key => $mngr) {
-                    $mngr['position'] = "kjhh";//getTextFromCode($mngr['position'], POSITIONS);
-                    $managers[] = $mngr;
-                }
-            }
-
-            if (isset($ed['employees']) && is_array($ed['employees'])) {
-                foreach ($ed['employees'] as $key => $emps) {
-                    $emps['position'] = "bjh";//($emps['position'], POSITIONS);
-                    $employees[] = $emps;
-                }
-            }
-
-            $ed['managers'] = $managers;
-            $ed['employees'] = $employees;
-            $returnarr[] = $ed;
-        }
-
-        return $returnarr;
     }
 }
