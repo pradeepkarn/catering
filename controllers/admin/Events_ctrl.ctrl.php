@@ -605,14 +605,14 @@ class Events_ctrl
 
             if (isset($ed['managers']) && is_array($ed['managers'])) {
                 foreach ($ed['managers'] as $key => $mngr) {
-                    $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
+                    $mngr['position'] = "kjhh";//getTextFromCode($mngr['position'], POSITIONS);
                     $managers[] = $mngr;
                 }
             }
 
             if (isset($ed['employees']) && is_array($ed['employees'])) {
                 foreach ($ed['employees'] as $key => $emps) {
-                    $emps['position'] = getTextFromCode($emps['position'], POSITIONS);
+                    $emps['position'] = "bjh";//($emps['position'], POSITIONS);
                     $employees[] = $emps;
                 }
             }
