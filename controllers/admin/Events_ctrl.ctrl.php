@@ -576,13 +576,13 @@ class Events_ctrl
 
             if (is_array($managerIds) && count($managerIds) > 0) {
                 $managerIdsString = implode(",", $managerIds);
-                $sql = "SELECT first_name, last_name, position, company, isd_code, mobile FROM pk_user WHERE id IN ($managerIdsString);";
+                $sql = "SELECT first_name, last_name, position, company, country, isd_code, mobile FROM pk_user WHERE id IN ($managerIdsString);";
                 $managers = $db->show($sql);
             }
 
             if (is_array($employeeIds) && count($employeeIds) > 0) {
                 $employeeIdsString = implode(",", $employeeIds);
-                $sql = "SELECT first_name, last_name, position, company, isd_code, mobile FROM pk_user WHERE id IN ($employeeIdsString);";
+                $sql = "SELECT first_name, last_name, position, company, country, isd_code, mobile FROM pk_user WHERE id IN ($employeeIdsString);";
                 $employees = $db->show($sql);
             }
 
