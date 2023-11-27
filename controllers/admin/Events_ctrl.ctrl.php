@@ -591,7 +591,7 @@ class Events_ctrl
                 $mngr['food_category'] = getTextFromCode(2,FOOD_CATEGORY);
                 $scandata = $this->get_emp_scandata($db, $empid = $mngr['id']);
                 $mngr['attendence'] = array_map(function ($sd) {
-                    $sd['scan_data'] = json_decode($sd['scan_data']);
+                    // $sd['scan_data'] = json_decode($sd['scan_data']);
                     $sd['day'] = date("d",strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
@@ -603,7 +603,7 @@ class Events_ctrl
                 $scandata = $this->get_emp_scandata($db, $empid = $emp['id']);
                 $emp['food_category'] = getTextFromCode(1,FOOD_CATEGORY);
                 $emp['attendence'] = array_map(function ($sd) {
-                    $sd['scan_data'] = json_decode($sd['scan_data']);
+                    // $sd['scan_data'] = json_decode($sd['scan_data']);
                     $sd['day'] = date("d",strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);

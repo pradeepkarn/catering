@@ -57,6 +57,13 @@ function generate_excel_from_data($event)
     $emps = array_merge($event['employees'], $event['managers']);
     foreach ($emps as $key => $employee) {
         $mobile = strval($employee['isd_code'] . $employee['mobile']);
+        $days = [];
+        if (isset($emps['attendence'])) {
+            foreach ($emps['attendence'] as $key => $atn) {
+                $days[] = $atn['day'];
+            }
+        }
+
         $color = $row % 2 == 0 ?  'FFFFFF' : 'D3D3D3'; // Alternate row colors (yellow and white)
         $sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
 
