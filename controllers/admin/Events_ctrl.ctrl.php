@@ -586,23 +586,25 @@ class Events_ctrl
             }
 
             // Corrected the array_map function and variable names
-            $event['managers'] = array_map(function ($mngr) use($db){
+            $event['managers'] = array_map(function ($mngr) use ($db) {
                 $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
-                 $scandata = $this->get_emp_scandata($db,$empid=$mngr['id']);
-                 $mngr['attendence'] = array_map(function($sd){
+                $scandata = $this->get_emp_scandata($db, $empid = $mngr['id']);
+                $mngr['attendence'] = array_map(function ($sd) {
                     $sd['scan_data'] = json_decode($sd['scan_data']);
+                    $sd['food_category'] = getTextFromCode($sd['food_category'],FOOD_CATEGORY);
                     return $sd;
-                 },$scandata);
+                }, $scandata);
                 return $mngr;
             }, $managers);
 
-            $event['employees'] = array_map(function ($emp) use($db){
+            $event['employees'] = array_map(function ($emp) use ($db) {
                 $emp['position'] = getTextFromCode($emp['position'], POSITIONS);
-                $scandata = $this->get_emp_scandata($db,$empid=$emp['id']);
-                $emp['attendence'] = array_map(function($sd){
-                   $sd['scan_data'] = json_decode($sd['scan_data']);
-                   return $sd;
-                },$scandata);
+                $scandata = $this->get_emp_scandata($db, $empid = $emp['id']);
+                $emp['attendence'] = array_map(function ($sd) {
+                    $sd['scan_data'] = json_decode($sd['scan_data']);
+                    $sd['food_category'] = getTextFromCode($sd['food_category'],FOOD_CATEGORY);
+                    return $sd;
+                }, $scandata);
                 return $emp;
             }, $employees);
             return $event;
@@ -611,7 +613,8 @@ class Events_ctrl
         }
     }
 
-    function get_emp_scandata($db,$empid){
+    function get_emp_scandata($db, $empid)
+    {
         $sql = "select * from qr_scan_data where user_id = '$empid'";
         return $db->show($sql);
     }
