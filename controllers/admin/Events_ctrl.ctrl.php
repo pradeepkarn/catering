@@ -598,7 +598,18 @@ class Events_ctrl
         $data = $this->event_data($content_id);
         $returnarr = null;
         foreach ($data as $key => $ed) {
-           $ed['position'] = getTextFromCode($ed['position'],POSITIONS);
+            $managers=[];
+            $employees=[];
+            foreach ($ed['managers'] as $key => $mngr) {
+                $mngr['position'] = getTextFromCode($mngr['position'],POSITIONS);
+                $managers[] = $mngr;
+            }
+            foreach ($ed['employees'] as $key => $emps) {
+                $emps['position'] = getTextFromCode($emps['position'],POSITIONS);
+                $employees[] = $emps;
+            }
+           $ed['managers'] = $managers;
+           $ed['employees'] = $employees;
            $returnarr[] = $ed;
         }
         return $returnarr;
