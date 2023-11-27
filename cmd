@@ -10,7 +10,9 @@ import("settings.php");
 define("direct_access", 1);
 
 ############################################################################
-
+$event = new Events_ctrl;
+$data = $event->generate_excel($content_id=33717);
+print_r($data);
 exit;
 function updateProgressBar($current, $total)
 {
