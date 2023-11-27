@@ -54,8 +54,8 @@ function generate_excel_from_data($event)
 
     // Set data
     $row = 2; // Start from row 2
-    // $emps = array_merge($event['employees'], $event['managers']);
-    foreach ($event['employees'] as $key => $employee) {
+    $emps = array_merge($event['employees'], $event['managers']);
+    foreach ($emps as $key => $employee) {
         $mobile = strval($employee['isd_code'] . $employee['mobile']);
         $days = [];
         if (isset($employee['attendence'])) {
@@ -84,7 +84,7 @@ function generate_excel_from_data($event)
             $attenedence = $attend?"P":"A";
             $sheet->setCellValue(Coordinate::stringFromColumnIndex(11 + $i) . $row, $attenedence);
             if ($attend) {
-                $sheet->getStyle(Coordinate::stringFromColumnIndex(11 + $i) . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF69B4'); // Hot Pink
+                $sheet->getStyle(Coordinate::stringFromColumnIndex(11 + $i) . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00'); // Yellow
                 $attendence_count += 1;
             }
         }
