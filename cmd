@@ -63,7 +63,7 @@ function generate_excel_from_data($event)
                 $days[] = $atn['day'];
             }
         }
-        print_r($emps);
+        print_r($days);
 
         $color = $row % 2 == 0 ?  'FFFFFF' : 'D3D3D3'; // Alternate row colors (yellow and white)
         $sheet->getStyle('A' . $row . ':G' . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
