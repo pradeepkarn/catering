@@ -43,7 +43,7 @@ $req = $context->req;
                 <div class="col-md-8">
                     <?php
                     $auth = new Auth();
-                    $permsns = $auth->permissions('employee');
+                    // $permsns = $auth->permissions('employee');
                     // myprint($permsns);
                     ?>
                     <div class="row">
