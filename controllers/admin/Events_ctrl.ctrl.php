@@ -596,6 +596,7 @@ class Events_ctrl
     function generate_excel($content_id)
     {
         $data = $this->event_data($content_id);
+        return $data;
         $returnarr = null;
         foreach ($data as $key => $ed) {
             $managers=[];
