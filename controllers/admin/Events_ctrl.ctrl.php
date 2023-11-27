@@ -592,6 +592,7 @@ class Events_ctrl
                 $mngr['attendence'] = array_map(function ($sd) {
                     $sd['scan_data'] = json_decode($sd['scan_data']);
                     $sd['food_category'] = getTextFromCode($sd['food_category'],FOOD_CATEGORY);
+                    $sd['day'] = date("d",strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
                 return $mngr;
@@ -603,6 +604,7 @@ class Events_ctrl
                 $emp['attendence'] = array_map(function ($sd) {
                     $sd['scan_data'] = json_decode($sd['scan_data']);
                     $sd['food_category'] = getTextFromCode($sd['food_category'],FOOD_CATEGORY);
+                    $sd['day'] = date("d",strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
                 return $emp;
