@@ -561,7 +561,8 @@ class Events_ctrl
         $cntobj = new Model('content');
         return $cntobj->filter_index(array('content_group' => 'product_category', 'is_active' => $active), $ord, $limit);
     }
-    function event_data($content_id) {
+    function event_data($content_id)
+    {
         $db = new Dbobjects;
 
         $sql = "SELECT id, title, banner, managers, employees FROM content WHERE id = $content_id";
@@ -596,22 +597,31 @@ class Events_ctrl
     function generate_excel($content_id)
     {
         $data = $this->event_data($content_id);
-        $returnarr = null;
+
+        $returnarr = [];
         foreach ($data as $key => $ed) {
-            $managers=[];
-            $employees=[];
-            foreach ($ed['managers'] as $key => $mngr) {
-                $mngr['position'] = getTextFromCode($mngr['position'],POSITIONS);
-                $managers[] = $mngr;
+            $managers = [];
+            $employees = [];
+
+            if (isset($ed['managers']) && is_array($ed['managers'])) {
+                foreach ($ed['managers'] as $key => $mngr) {
+                    $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
+                    $managers[] = $mngr;
+                }
             }
-            foreach ($ed['employees'] as $key => $emps) {
-                $emps['position'] = getTextFromCode($emps['position'],POSITIONS);
-                $employees[] = $emps;
+
+            if (isset($ed['employees']) && is_array($ed['employees'])) {
+                foreach ($ed['employees'] as $key => $emps) {
+                    $emps['position'] = getTextFromCode($emps['position'], POSITIONS);
+                    $employees[] = $emps;
+                }
             }
-           $ed['managers'] = $managers;
-           $ed['employees'] = $employees;
-           $returnarr[] = $ed;
+
+            $ed['managers'] = $managers;
+            $ed['employees'] = $employees;
+            $returnarr[] = $ed;
         }
+
         return $returnarr;
     }
 }
