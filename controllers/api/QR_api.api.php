@@ -61,14 +61,14 @@ class QR_api
             $arr['user_id'] = $saccned_user_id;
             $arr['scan_date'] = date('Y-m-d');
             $arr['is_active'] = 1;
-            $arr['scan_group'] = $req->scan_group;
+            $arr['scan_group'] = intval($req->scan_group);
             $already_today = $this->db->findOne($arr);
             $arr['scanned_by'] = $user->id;
             $arr['created_at'] = date('Y-m-d H:i:s');
             $arr['scan_time'] = date('H:i:s');
             $arr['event_id'] = $req->event_id ?? null;
             $arr['scan_data'] = json_encode($req->qrdata);
-            $arr['food_category'] = $req->food_category;
+            $arr['food_category'] = intval($req->food_category);
             $this->db->insertData = $arr;
             try {
                 if ($already_today) {

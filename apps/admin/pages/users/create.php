@@ -75,8 +75,8 @@ $req = $context->req;
                             </div>
                             <div class="col-md-6 my-2">
                                 <label for="">Nationality</label>
-                                  <!-- Input for search -->
-                                  <style>
+                                <!-- Input for search -->
+                                <style>
                                     /* Apply the height to the select within #isdCodeSearchContainer */
                                     .select2-selection--single,
                                     #mobileInput {
@@ -97,7 +97,7 @@ $req = $context->req;
                                 </select>
                                 <script>
                                     $(document).ready(function() {
-                                       
+
                                         // Initialize Select2 on the ISD code search input
                                         $('#countryCodeSearch').select2({
                                             placeholder: 'Search for ISD code',
