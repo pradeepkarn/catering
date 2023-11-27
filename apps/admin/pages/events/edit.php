@@ -82,7 +82,7 @@ if ($pd->json_obj != "") {
                         <?php foreach ($manager_list as $key => $emp) :
                             $emp = obj($emp);
                         ?>
-                            <?php echo in_array($emp->id, $managers) ? "<li>{$emp->first_name} {$emp->last_name}</li>"  : null; ?>
+                            <?php echo in_array($emp->id, $managers) ? "<li>{$emp->id} - {$emp->first_name} {$emp->last_name}</li>"  : null; ?>
                         <?php endforeach; ?>
                     </ol>
                     <b>Employees:</b>
@@ -94,7 +94,7 @@ if ($pd->json_obj != "") {
                         ?>
                             <?php
                             // if (!in_array($emp->id, $managers)) {
-                                echo in_array($emp->id, $employees) ? "<li>{$emp->first_name} {$emp->last_name}</li>"  : null;
+                                echo in_array($emp->id, $employees) ? "<li>{$emp->id} - {$emp->first_name} {$emp->last_name}</li>"  : null;
                             // }
                             ?>
                         <?php endforeach;
