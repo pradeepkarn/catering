@@ -114,7 +114,7 @@ $active = $context->is_active;
                                     <td><?php echo $pv->title; ?></td>
                                     <td><?php echo $cat_title; ?></td>
                                     <td>
-                                        <a download href="/<?php echo MEDIA_URL."/docs/event_report_{$pv->id}"; ?>">Report</a>
+                                        <a download href="/<?php echo MEDIA_URL."/docs/event_reports/event_report_{$pv->id}.xlsx"; ?>">Report</a>
                                     </td>
                                     <td><?php echo $pv->status; ?></td>
                                     <td><?php echo $pv->created_at; ?></td>

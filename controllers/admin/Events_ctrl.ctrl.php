@@ -708,7 +708,7 @@ class Events_ctrl
 
         // Save the Excel file
         $writer = new Xlsx($spreadsheet);
-        $writer->save(RPATH."/media/docs/event_report_{$event_id}.xlsx");
+        $writer->save(RPATH."/media/docs/event_reports/event_report_{$event_id}.xlsx");
         // echo 'Excel file generated successfully.';
     }
 }
