@@ -15,6 +15,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
 
 function generate_excel_from_data($event)
 {
@@ -45,7 +46,10 @@ function generate_excel_from_data($event)
 
     // Set headers in cells K1 to AF1
     for ($i = 0; $i < 31; $i++) {
-        $sheet->setCellValue(Coordinate::stringFromColumnIndex(11 + $i) . '1', $i + 1);
+        $cellCoordinate = Coordinate::stringFromColumnIndex(11 + $i) . '1';
+        $sheet->setCellValue($cellCoordinate, $i + 1);
+        // Align cell content to the center
+        $sheet->getStyle($cellCoordinate)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
     }
     $sheet->setCellValue('AP1', 'TOTAL DAYS');
     // for ($col = 'A'; $col <= 'J'; $col++) {
@@ -80,11 +84,13 @@ function generate_excel_from_data($event)
         $sheet->setCellValue('J' . $row, $employee['food_category']);
         $attendence_count = 0;
         for ($i = 0; $i < 31; $i++) {
-            $attend = in_array($i+1,$days);
-            $attenedence = $attend?"P":"A";
-            $sheet->setCellValue(Coordinate::stringFromColumnIndex(11 + $i) . $row, $attenedence);
+            $attend = in_array($i + 1, $days);
+            $attenedence = $attend ? "P" : "A";
+            $cellCoordinate = Coordinate::stringFromColumnIndex(11 + $i) . $row;
+            $sheet->setCellValue($cellCoordinate, $attenedence);
             if ($attend) {
-                $sheet->getStyle(Coordinate::stringFromColumnIndex(11 + $i) . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00'); // Yellow
+                $sheet->getStyle($cellCoordinate)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFFF00'); // Yellow
+                $sheet->getStyle($cellCoordinate)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
                 $attendence_count += 1;
             }
         }
