@@ -54,9 +54,34 @@ class QR_api
             exit;
         }
         $user = (new Users_api)->get_user_by_token($req->token);
+        $event = $this->get_event_by_id($req->event_id);
+        if (!$event) {
+            msg_set('Event not found');
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
         if ($user) {
             $saccned_user_id = $req->qrdata->id;
             $user = obj($user);
+            if ($user->user_group!='manager') {
+                msg_set('You are not authorised to scan, as you are not a manager.');
+                $api['success'] = false;
+                $api['data'] = null;
+                $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+                echo json_encode($api);
+                exit;
+            }
+            if (!in_array($user->id, $event->managers)) {
+                msg_set('You are not manager in this event');
+                $api['success'] = false;
+                $api['data'] = null;
+                $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+                echo json_encode($api);
+                exit;
+            }
             $this->db->tableName = 'qr_scan_data';
             $arr['user_id'] = $saccned_user_id;
             $arr['scan_date'] = date('Y-m-d');
@@ -227,5 +252,9 @@ class QR_api
             );
         }
         return null;
+    }
+    function is_assigned($userid,$jsn) {
+        $mngrs = json_decode($jsn??'[]');
+        return in_array($userid,$mngrs);
     }
 }
