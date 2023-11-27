@@ -601,11 +601,12 @@ class Auth extends Main_ctrl
     }
     function permissions($cg=null) {
         $permissions = USER['permissions']?json_decode(USER['permissions']):[];
+        $cgquery = null;
         if ($cg) {
-           $cg = "AND content_group = '$cg'";
+           $cgquery = "AND content_group = '$cg'";
         }
         $permissions = implode(",",$permissions);
-        $sql = "select * from permissions where permissions.id IN ($permissions)  $cg";
+        $sql = "select * from permissions where permissions.id IN ($permissions)  $cgquery";
         return (new Dbobjects)->show($sql);
     }
 }
