@@ -221,7 +221,7 @@ class Admin_user_ctrl
                     $dir = MEDIA_ROOT . "docs/" . $docname;
                     $upload = move_uploaded_file($request->nid_doc['tmp_name'], $dir);
                     if ($upload) {
-                        $filearr['nid_doc'] = $imgname;
+                        $filearr['nid_doc'] = $docname;
                     }
                     
                 }
