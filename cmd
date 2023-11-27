@@ -21,15 +21,6 @@ function generate_excel_from_data($event)
 {
     $spreadsheet = new Spreadsheet();
     $sheet = $spreadsheet->getActiveSheet();
-
-    // Set cell colors
-    // $sheet->getStyle('A1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFA07A'); // Light Salmon
-    // $sheet->getStyle('B1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('ADD8E6'); // Light Blue
-    // $sheet->getStyle('C1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('98FB98'); // Pale Green
-    // $sheet->getStyle('D1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFD700'); // Gold
-    // $sheet->getStyle('E1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('87CEFA'); // Light Sky Blue
-    // $sheet->getStyle('F1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FFA500'); // Orange
-    // $sheet->getStyle('G1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF69B4'); // Hot Pink
     $sheet->getStyle('A1:J1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB("D3D3D3");
 
     // Set headers
@@ -52,10 +43,7 @@ function generate_excel_from_data($event)
         $sheet->getStyle($cellCoordinate)->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
     }
     $sheet->setCellValue('AP1', 'TOTAL DAYS');
-    // for ($col = 'A'; $col <= 'J'; $col++) {
-    //     $sheet->getColumnDimension($col)->setAutoSize(true);
-    // }
-
+ 
     // Set data
     $row = 2; // Start from row 2
     $emps = array_merge($event['employees'], $event['managers']);

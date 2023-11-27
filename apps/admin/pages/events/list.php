@@ -61,7 +61,7 @@ $active = $context->is_active;
                                 <th scope="col">Banner</th>
                                 <th scope="col">Title</th>
                                 <th scope="col">category</th>
-                                <th scope="col">Hits</th>
+                                <th scope="col">Report</th>
                                 <th scope="col">Status</th>
                                 <th scope="col">Publish Date</th>
                                 <?php
@@ -93,6 +93,7 @@ $active = $context->is_active;
                                     $restore_text = "Restore";
                                     $restore_link = route('eventRestore', ['id' => $pv->id]);
                                 }
+                                
                             ?>
 
                                 <tr>
@@ -112,7 +113,9 @@ $active = $context->is_active;
                                     </th>
                                     <td><?php echo $pv->title; ?></td>
                                     <td><?php echo $cat_title; ?></td>
-                                    <td><?php echo $pv->views; ?></td>
+                                    <td>
+                                        <a download href="/<?php echo MEDIA_URL."/docs/event_report_{$pv->id}"; ?>">Report</a>
+                                    </td>
                                     <td><?php echo $pv->status; ?></td>
                                     <td><?php echo $pv->created_at; ?></td>
                                     <?php
