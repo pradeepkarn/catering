@@ -1478,3 +1478,11 @@ function calculateDistance($startLat, $startLon, $endLat, $endLon)
     return null;
   }
 }
+function getTextFromCode($code, $arr)
+{
+  if (array_key_exists($code, $arr)) {
+    return $arr[$code];
+  } else {
+    return "NA";
+  }
+}

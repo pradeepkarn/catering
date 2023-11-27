@@ -561,8 +561,7 @@ class Events_ctrl
         $cntobj = new Model('content');
         return $cntobj->filter_index(array('content_group' => 'product_category', 'is_active' => $active), $ord, $limit);
     }
-    function generate_excel($content_id)
-    {
+    function event_data($content_id) {
         $db = new Dbobjects;
 
         $sql = "SELECT id, title, banner, managers, employees FROM content WHERE id = $content_id";
@@ -593,5 +592,15 @@ class Events_ctrl
         } else {
             return null; // Handle case where no content is found for the given ID
         }
+    }
+    function generate_excel($content_id)
+    {
+        $data = $this->event_data($content_id);
+        $returnarr = null;
+        foreach ($data as $key => $ed) {
+           $ed['postion'] = getTextFromCode($ed['postion'],POSITIONS);
+           $returnarr[] = $ed;
+        }
+        return $returnarr;
     }
 }
