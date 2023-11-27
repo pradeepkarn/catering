@@ -59,7 +59,7 @@ function generate_excel_from_data($event)
         $mobile = strval($employee['isd_code'] . $employee['mobile']);
         $days = [];
         if (isset($employee['attendence'])) {
-            foreach ($employee['attendence'] as $key => $atn) {
+            foreach ($employee['attendence'] as $atn) {
                 $days[] = $atn['day'];
             }
         }
