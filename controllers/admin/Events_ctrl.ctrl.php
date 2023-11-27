@@ -588,13 +588,21 @@ class Events_ctrl
             // Corrected the array_map function and variable names
             $event['managers'] = array_map(function ($mngr) use($db){
                 $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
-                $mngr['scan_data'] = $this->get_emp_scandata($db,$empid=$mngr['id']);
+                 $scandata = $this->get_emp_scandata($db,$empid=$mngr['id']);
+                 $mngr['attendence'] = array_map(function($sd){
+                    $sd['scan_data'] = json_decode($sd['scan_data']);
+                    return $sd;
+                 },$scandata);
                 return $mngr;
             }, $managers);
 
             $event['employees'] = array_map(function ($emp) use($db){
                 $emp['position'] = getTextFromCode($emp['position'], POSITIONS);
-                $emp['scan_data'] = $this->get_emp_scandata($db,$empid=$emp['id']);
+                $scandata = $this->get_emp_scandata($db,$empid=$emp['id']);
+                $emp['attendence'] = array_map(function($sd){
+                   $sd['scan_data'] = json_decode($sd['scan_data']);
+                   return $sd;
+                },$scandata);
                 return $emp;
             }, $employees);
             return $event;
