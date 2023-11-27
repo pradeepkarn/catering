@@ -79,10 +79,17 @@ function generate_excel_from_data($event)
         $sheet->setCellValue('I' . $row, "");
         $sheet->setCellValue('J' . $row, $employee['food_category']);
         for ($i = 0; $i < 31; $i++) {
-            $attenedence = in_array($i+1,$days)?"P":"A";
+            $attendence_count = 0;
+            $attend = in_array($i+1,$days);
+            $attenedence = $attend?"P":"A";
             $sheet->setCellValue(Coordinate::stringFromColumnIndex(11 + $i) . $row, $attenedence);
+            if ($attend) {
+                $sheet->getStyle(Coordinate::stringFromColumnIndex(11 + $i) . $row)->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB('FF69B4'); // Hot Pink
+                $attendence_count += 1;
+            }
         }
-        $sheet->setCellValue('AP' . $row, 0);
+        $sheet->setCellValue('AP' . $row, $attendence_count);
+        $attendence_count = 0;
         $row++;
     }
 
