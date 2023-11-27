@@ -605,6 +605,6 @@ class Events_ctrl
 
     function get_emp_scandata($db,$empid){
         $sql = "select * from qr_scan_data where user_id = '$empid'";
-        $db->show($sql);
+        return $db->show($sql);
     }
 }
