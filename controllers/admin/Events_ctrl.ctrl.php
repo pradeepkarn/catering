@@ -561,10 +561,8 @@ class Events_ctrl
         $cntobj = new Model('content');
         return $cntobj->filter_index(array('content_group' => 'product_category', 'is_active' => $active), $ord, $limit);
     }
-    function generate_excel($content_id)
+    function generate_excel($db,$content_id)
     {
-        $db = new Dbobjects;
-
         $sql = "SELECT id, title, banner, managers, employees FROM content WHERE id = $content_id";
         $event = $db->showOne($sql);
         $managers = [];
@@ -587,19 +585,25 @@ class Events_ctrl
             }
 
             // Corrected the array_map function and variable names
-            $event['managers'] = array_map(function ($mngr) {
+            $event['managers'] = array_map(function ($mngr) use($db){
                 $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
+                $mngr['scan_data'] = $this->get_emp_scandata($db,$empid=$mngr['id']);
                 return $mngr;
             }, $managers);
 
-            $event['employees'] = array_map(function ($emp) {
+            $event['employees'] = array_map(function ($emp) use($db){
                 $emp['position'] = getTextFromCode($emp['position'], POSITIONS);
+                $emp['scan_data'] = $this->get_emp_scandata($db,$empid=$emp['id']);
                 return $emp;
             }, $employees);
-
             return $event;
         } else {
             return null; // Handle case where no content is found for the given ID
         }
+    }
+
+    function get_emp_scandata($db,$empid){
+        $sql = "select * from qr_scan_data where user_id = '$empid'";
+        $db->show($sql);
     }
 }
