@@ -131,7 +131,7 @@ class Event_api
     function get_employee_details($db, $idList)
     {
         $escapedIds = implode(',', array_map('intval', $idList));
-        $sql = "SELECT id, CONCAT(first_name, ' ', last_name) AS name, email, image FROM pk_user WHERE id IN ($escapedIds)";
+        $sql = "SELECT id, CONCAT(first_name, ' ', last_name) AS name, email, image FROM pk_user WHERE id IN ($escapedIds) order by id desc";
         return $db->show($sql);
     }
     function get_all_events($myid = null)
