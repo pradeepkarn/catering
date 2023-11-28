@@ -183,7 +183,7 @@ class Event_api
     }
     function event_report_generate($req = null)
     {
-        
+
         $req = obj($req);
         $data  = json_decode(file_get_contents("php://input"), true);
         $rules = [
@@ -229,18 +229,18 @@ class Event_api
         }
         $event_ctrl = new Events_ctrl;
         // Set headers for download
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx" . '"');
-        header('Cache-Control: max-age=0');
-        $res = $event_ctrl->generate_excel($event_id = $event->id, $month = $req->month);
+        // header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        // header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx" . '"');
+        // header('Cache-Control: max-age=0');
+        $res = $event_ctrl->generate_excel($event_id = $event->id, $month = $req->month, $save = true);
         if ($res->success == true) {
-            
-            // msg_set('Generated successfully');
-            // $file = "/media/docs/event_reports/" . $res->data;
-            // $api['success'] = true;
-            // $api['data'] = $file;
-            // $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
-            // echo json_encode($api);
+
+            msg_set('Generated successfully');
+            $file = "/media/docs/event_reports/" . $res->data;
+            $api['success'] = true;
+            $api['data'] = $file;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
 
             exit;
         } else {

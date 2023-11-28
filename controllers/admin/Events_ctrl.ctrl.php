@@ -636,7 +636,7 @@ class Events_ctrl
         return $db->show($sql);
     }
 
-    function generate_excel($event_id, $month)
+    function generate_excel($event_id, $month, $save=false)
     {
         $event = $this->event_report($event_id, $month);
         try {
@@ -710,8 +710,11 @@ class Events_ctrl
 
             // Save the Excel file
             $writer = new Xlsx($spreadsheet);
-            $writer->save(RPATH . "/media/docs/event_reports/event_report_{$event_id}_{$month}.xlsx");
-            $writer->save("php://output");
+            if ($save==true) {
+                $writer->save(RPATH . "/media/docs/event_reports/event_report_{$event_id}_{$month}.xlsx");
+            }else{
+                $writer->save("php://output");
+            }            
             return (object) ['success' => true, 'message' => 'generated', 'data'=>"event_report_{$event_id}_{$month}.xlsx"];
         } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
             // Handle specific writer exceptions
