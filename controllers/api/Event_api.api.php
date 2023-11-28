@@ -184,8 +184,6 @@ class Event_api
     function event_report_generate($req = null)
     {
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx" . '"');
-        header('Cache-Control: max-age=0');
         $req = obj($req);
         $data  = json_decode(file_get_contents("php://input"), true);
         $rules = [
@@ -234,6 +232,8 @@ class Event_api
 
         $res = $event_ctrl->generate_excel($event_id = $event->id, $month = $req->month);
         if ($res->success == true) {
+            header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx" . '"');
+            header('Cache-Control: max-age=0');
             // msg_set('Generated successfully');
             // $file = "/media/docs/event_reports/" . $res->data;
             // $api['success'] = true;
