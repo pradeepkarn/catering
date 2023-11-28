@@ -44,14 +44,14 @@ class QR_api
             echo json_encode($api);
             exit;
         }
-        if (!in_array($req->food_category, array_flip(FOOD_CATEGORY))) {
-            msg_set('Invalid food category');
-            $api['success'] = false;
-            $api['data'] = null;
-            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
-            echo json_encode($api);
-            exit;
-        }
+        // if (!in_array($req->food_category, array_flip(FOOD_CATEGORY))) {
+        //     msg_set('Invalid food category');
+        //     $api['success'] = false;
+        //     $api['data'] = null;
+        //     $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+        //     echo json_encode($api);
+        //     exit;
+        // }
         $user = (new Users_api)->get_user_by_token($req->token);
         $event = $this->get_event_by_id($req->event_id);
         if (!$event) {
