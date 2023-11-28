@@ -710,7 +710,7 @@ class Events_ctrl
 
         // Save the Excel file
         $writer = new Xlsx($spreadsheet);
-        // $writer->save(RPATH."/media/docs/event_reports/event_report_{$event_id}.xlsx");
+        $writer->save(RPATH."/media/docs/event_reports/event_report_{$event_id}_{$month}.xlsx");
         $writer->save("php://output");
         // echo 'Excel file generated successfully.';
     }
@@ -742,7 +742,7 @@ class Events_ctrl
         }
         // Set headers for download
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="' . "report" . $req->event_id . "_" . $req->month .".xlsx". '"');
+        header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx". '"');
         header('Cache-Control: max-age=0');
         $this->generate_excel($req->event_id, $req->month);
         // echo go_to(route('eventList'));

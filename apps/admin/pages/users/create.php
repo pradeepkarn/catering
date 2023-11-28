@@ -145,10 +145,7 @@ $req = $context->req;
                                 <label for="">Company</label>
                                 <input type="text" name="company" class="form-control">
                             </div>
-                            <!-- <div class="col-md-6 my-2">
-                                <label for="">IQMA ID No.</label>
-                                <input type="text" name="nid_no" class="form-control">
-                            </div> -->
+
                             <!-- <div class="col-md-6 my-2">
                                 <label for="">IQM ID DOC (PDF)</label>
                                 <input accept="application/pdf" type="file" name="nid_doc" class="form-control">
@@ -229,6 +226,11 @@ $req = $context->req;
                     <h4>Profile Image</h4>
                     <input accept="image/*" id="image-input" type="file" name="image" class="form-control my-3">
                     <img style="width:100%; max-height:300px; object-fit:contain;" id="banner" src="" alt="">
+                    <h4>Food Category</h4>
+                    <select name="food_category" class="form-select my-3">
+                        <option value="1">JUNIOR</option>
+                        <option value="2">SENIOR</option>
+                    </select>
                     <h4>Password</h4>
                     <input type="text" name="password" class="form-control my-3" placeholder="Password">
 
