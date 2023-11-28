@@ -67,7 +67,12 @@ class Event_api
         if ($user) {
             $event = $this->get_employees_by_event_id($user['id'], $req->event_id);
         } else {
-            $events = null;
+            msg_set("Invalid token");
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
         }
         if ($event) {
             msg_set('Employees found successfully');
