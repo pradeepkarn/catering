@@ -203,7 +203,7 @@ class QR_api
                 if ($emp_id) {
                     $arr['user_id'] = $emp_id;
                 }
-                $reports = $this->db->filter($arr);
+                $reports = $this->db->filter(assoc_arr:$arr,ord:"desc",change_order_by_col:"id");
                 if ($reports) {
                     $dta = [];
                     foreach ($reports as $key => $rprts) {
