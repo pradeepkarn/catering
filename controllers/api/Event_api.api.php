@@ -184,7 +184,6 @@ class Event_api
     function event_report_generate($req = null)
     {
         $req = obj($req);
-        header('Content-Type: application/json');
         $data  = json_decode(file_get_contents("php://input"), true);
         $rules = [
             'token' => 'required|string',
@@ -193,6 +192,7 @@ class Event_api
         ];
         $pass = validateData(data: $data, rules: $rules);
         if (!$pass) {
+            header('Content-Type: application/json');
             $api['success'] = false;
             $api['data'] = null;
             $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
@@ -202,6 +202,7 @@ class Event_api
         $req = obj($data);
         $user = (new Users_api)->get_user_by_token($req->token);
         if (!$user) {
+            header('Content-Type: application/json');
             msg_set("Manager not found");
             $api['success'] = false;
             $api['data'] = null;
@@ -211,6 +212,7 @@ class Event_api
         }
         $event = $this->event_by_id($req->event_id);
         if (!$event) {
+            header('Content-Type: application/json');
             msg_set("Event not found");
             $api['success'] = false;
             $api['data'] = null;
@@ -220,6 +222,7 @@ class Event_api
         }
         $user = obj($user);
         if (!in_array($user->id, $event->managers)) {
+            header('Content-Type: application/json');
             msg_set('You are not manager in this event');
             $api['success'] = false;
             $api['data'] = null;
@@ -243,6 +246,7 @@ class Event_api
             header('Cache-Control: max-age=0');
             exit;
         } else {
+            header('Content-Type: application/json');
             msg_set('Report not generated');
             $api['success'] = false;
             $api['data'] =  null;
