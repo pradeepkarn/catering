@@ -65,7 +65,7 @@ class Event_api
         $req = obj($data);
         $user = (new Users_api)->get_user_by_token($req->token);
         if ($user) {
-            $event = $this->get_employees_by_event_id($user['id'], $req->event_id);
+            $event = $this->get_employees_by_event_id($req->event_id);
         } else {
             msg_set("Invalid token");
             $api['success'] = false;
