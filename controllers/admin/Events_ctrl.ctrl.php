@@ -209,6 +209,17 @@ class Events_ctrl
             }
             $postid = (new Model('content'))->store($arr);
             if (intval($postid)) {
+                $emps = array_unique(array_merge($request->managers, $request->employees));
+                $logs = new Model('staff_entries');
+                foreach ($emps as $empid) {
+                    $logs->store([
+                        'staff_id' => $empid,
+                        'event_id' => $postid,
+                        'check_in' => date('Y-m-d'),
+                        'log_group' => 1,
+                        'handled_by' => USER['id']
+                    ]);
+                }
                 $ext = pathinfo($request->banner['name'], PATHINFO_EXTENSION);
                 $imgstr = getUrlSafeString($request->title);
                 $imgname = str_replace(" ", "_", $imgstr) . uniqid("_") . "." . $ext;
@@ -353,6 +364,35 @@ class Events_ctrl
             }
             try {
                 (new Model('content'))->update($request->id, $arr);
+                $emps = array_unique(array_merge($request->managers, $request->employees));
+                $db = new Dbobjects;
+                $db->tableName = 'staff_entries';
+
+
+                $logs = new Model('staff_entries');
+                foreach ($emps as $empid) {
+                    $sql = "select * from staff_entries where staff_id = '$empid' AND event_id = '$request->id' order by id desc;";
+                    $exists = $db->showOne($sql);
+                    if ($exists) {
+                        if ($exists['log_group'] == '0') {
+                            $logs->store([
+                                'staff_id' => $empid,
+                                'event_id' => $request->id,
+                                'check_in' => date('Y-m-d'),
+                                'log_group' => 1,
+                                'handled_by' => USER['id']
+                            ]);
+                        }
+                    } else {
+                        $logs->store([
+                            'staff_id' => $empid,
+                            'event_id' => $request->id,
+                            'check_in' => date('Y-m-d'),
+                            'log_group' => 1,
+                            'handled_by' => USER['id']
+                        ]);
+                    }
+                }
                 echo js_alert('event updated');
                 echo go_to(route('eventEdit', ['id' => $request->id]));
                 exit;
@@ -636,7 +676,7 @@ class Events_ctrl
         return $db->show($sql);
     }
 
-    function generate_excel($event_id, $month, $save=false)
+    function generate_excel($event_id, $month, $save = false)
     {
         $event = $this->event_report($event_id, $month);
         try {
@@ -710,12 +750,12 @@ class Events_ctrl
 
             // Save the Excel file
             $writer = new Xlsx($spreadsheet);
-            if ($save==true) {
+            if ($save == true) {
                 $writer->save(RPATH . "/media/docs/event_reports/event_report_{$event_id}_{$month}.xlsx");
-            }else{
+            } else {
                 $writer->save("php://output");
-            }            
-            return (object) ['success' => true, 'message' => 'generated', 'data'=>"event_report_{$event_id}_{$month}.xlsx"];
+            }
+            return (object) ['success' => true, 'message' => 'generated', 'data' => "event_report_{$event_id}_{$month}.xlsx"];
         } catch (\PhpOffice\PhpSpreadsheet\Writer\Exception $e) {
             // Handle specific writer exceptions
             return (object) ['success' => false, 'message' => 'Error during file generation:'];
