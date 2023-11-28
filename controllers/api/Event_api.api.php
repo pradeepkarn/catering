@@ -228,18 +228,19 @@ class Event_api
             exit;
         }
         $event_ctrl = new Events_ctrl;
-         // Set headers for download
-         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-         header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx" . '"');
-         header('Cache-Control: max-age=0');
+        // Set headers for download
+
         $res = $event_ctrl->generate_excel($event_id = $event->id, $month = $req->month);
         if ($res->success == true) {
-            msg_set('Generated successfully');
-            $file = "/media/docs/event_reports/" . $res->data;
-            $api['success'] = true;
-            $api['data'] = $file;
-            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
-            echo json_encode($api);
+            // msg_set('Generated successfully');
+            // $file = "/media/docs/event_reports/" . $res->data;
+            // $api['success'] = true;
+            // $api['data'] = $file;
+            // $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            // echo json_encode($api);
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx" . '"');
+            header('Cache-Control: max-age=0');
             exit;
         } else {
             msg_set('Report not generated');
