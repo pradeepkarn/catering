@@ -64,7 +64,17 @@ class QR_api
         }
         if ($user) {
             $saccned_user_id = $req->qrdata->id;
+            $employee = (new Users_api)->get_user_by_id($req->qrdata->id);
+            if (!$employee) {
+                msg_set('Invalid employee id');
+                $api['success'] = false;
+                $api['data'] = null;
+                $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+                echo json_encode($api);
+                exit;
+            }
             $user = obj($user);
+            $employee  = obj($employee );
             if ($user->user_group!='manager') {
                 msg_set('You are not authorised to scan, as you are not a manager.');
                 $api['success'] = false;
@@ -92,7 +102,7 @@ class QR_api
             $arr['scan_time'] = date('H:i:s');
             $arr['event_id'] = $req->event_id ?? null;
             $arr['scan_data'] = json_encode($req->qrdata);
-            $arr['food_category'] = intval($req->food_category??1);
+            $arr['food_category'] = $employee->food_category;
             $this->db->insertData = $arr;
             try {
                 if ($already_today) {

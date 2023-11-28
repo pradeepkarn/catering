@@ -215,7 +215,11 @@ $req->ug = $ug;
                     <div class="text-center">
                         <img style="width:200px; height:200px; object-fit:cover; border-radius:50%;" id="image" src="/<?php echo MEDIA_URL; ?>/images/profiles/<?php echo $ud->image; ?>" alt="<?php echo $ud->image; ?>">
                     </div>
-
+                    <h4>Food Category</h4>
+                    <select name="food_category" class="form-select my-3">
+                        <option <?php echo $ud->food_category==1?"selected":null; ?> value="1">JUNIOR</option>
+                        <option <?php echo $ud->food_category==2?"selected":null; ?> value="2">SENIOR</option>
+                    </select>
                     <h4>Password</h4>
                     <input type="text" name="password" class="form-control my-3" placeholder="Password">
 

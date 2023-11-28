@@ -483,6 +483,7 @@ class Users_api
                     'email' => $u->email,
                     'isd_code' => $u->isd_code,
                     'mobile' => $u->mobile,
+                    'food_category' => $u->food_category,
                     'token' => $u->app_login_token,
                 );
             }
@@ -505,6 +506,7 @@ class Users_api
                     'email' => $u->email,
                     'isd_code' => $u->isd_code,
                     'mobile' => $u->mobile,
+                    'food_category' => $u->food_category,
                     'token' => $u->app_login_token,
                 );
             }

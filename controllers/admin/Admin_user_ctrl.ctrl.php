@@ -197,6 +197,9 @@ class Admin_user_ctrl
             if (isset($request->company)) {
                 $arr['company'] = $request->company;
             }
+            if (isset($request->food_category)) {
+                $arr['food_category'] = intval($request->food_category);
+            }
             
             $arr['password'] = md5($request->password);
             if (isset($request->bio)) {
@@ -353,10 +356,10 @@ class Admin_user_ctrl
                 $arr['company'] = $request->company;
             }
             
-            
+            if (isset($request->food_category)) {
+                $arr['food_category'] = intval($request->food_category);
+            }
            
-
-
             if (isset($request->password) && $request->password != "") {
                 $arr['password'] = md5($request->password);
                 $_SESSION['msg'][] = "Password updated";
