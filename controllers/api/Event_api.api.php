@@ -229,12 +229,12 @@ class Event_api
         }
         $event_ctrl = new Events_ctrl;
         // Set headers for download
-
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx" . '"');
+        header('Cache-Control: max-age=0');
         $res = $event_ctrl->generate_excel($event_id = $event->id, $month = $req->month);
         if ($res->success == true) {
-            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-            header('Content-Disposition: attachment;filename="' . "event_report_{$req->event_id}_{$req->month}.xlsx" . '"');
-            header('Cache-Control: max-age=0');
+            
             // msg_set('Generated successfully');
             // $file = "/media/docs/event_reports/" . $res->data;
             // $api['success'] = true;
