@@ -183,7 +183,7 @@ class Event_api
     }
     function event_report_generate($req = null)
     {
-
+        header('Content-Type: application/json');
         $req = obj($req);
         $data  = json_decode(file_get_contents("php://input"), true);
         $rules = [
