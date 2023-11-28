@@ -10,4 +10,6 @@ $api_routes = [
 
     "/api/v1/event/list" => 'Event_api@list@name.eventListApi',
     "/api/v1/event/employees" => 'Event_api@get_event_employees@name.eventEmployessApi',
+
+    "/api/v1/event/generate-report" => 'Event_api@event_report_generate@name.generateReportApi',
 ];
