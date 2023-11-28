@@ -11,7 +11,7 @@ define("direct_access", 1);
 
 $event = new Events_ctrl;
 $data = $event->event_report($event_id=33717, $month=11);
-echo json_encode($data);
+echo json_encode($data,JSON_PRETTY_PRINT);
 exit;
 
 function updateProgressBar($current, $total)
