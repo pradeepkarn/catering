@@ -57,8 +57,8 @@ if ($pd->json_obj != "") {
             <div class="row">
                 <div class="col-md-8">
                     <?php 
-                    $evnt = new Events_ctrl;
-                    $data = $evnt->generate_excel($content_id=$pd->id);
+                    // $evnt = new Events_ctrl;
+                    // $data = $evnt->generate_excel($content_id=$pd->id);
                     // myprint($data);
                     ?>
                     <h4>Title</h4>
