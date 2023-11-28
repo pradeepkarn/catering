@@ -1,6 +1,6 @@
 <?php
 
-class Event_api
+class Event_api__
 {
     public $db;
     function __construct()
