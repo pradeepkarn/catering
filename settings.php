@@ -37,6 +37,21 @@ const FOOD_CATEGORY = [
 const USER_GROUP_LIST = ['employee', 'manager'];
 const ADMIN_GROUP_LIST = ['superuser', 'admin', 'subadmin'];
 const PERMISSION_GROUP_LIST = ['all', 'employee', 'event', 'subadmin'];
+
+const MONTHS = [
+    ['id' => 1, 'code' => 'JAN', 'name' => 'January'],
+    ['id' => 2, 'code' => 'FEB', 'name' => 'February'],
+    ['id' => 3, 'code' => 'MAR', 'name' => 'March'],
+    ['id' => 4, 'code' => 'APR', 'name' => 'April'],
+    ['id' => 5, 'code' => 'MAY', 'name' => 'May'],
+    ['id' => 6, 'code' => 'JUN', 'name' => 'June'],
+    ['id' => 7, 'code' => 'JUL', 'name' => 'July'],
+    ['id' => 8, 'code' => 'AUG', 'name' => 'August'],
+    ['id' => 9, 'code' => 'SEP', 'name' => 'September'],
+    ['id' => 10, 'code' => 'OCT', 'name' => 'October'],
+    ['id' => 11, 'code' => 'NOV', 'name' => 'November'],
+    ['id' => 12, 'code' => 'DEC', 'name' => 'December']
+];
 // employee positions
 const POSITIONS = [
     0 => "HELPER", 1 => "MASON", 2 => "SCAFFOLDER", 3 => "ELECTRICIAN", 4 => "LAYDOWN SECURITY",

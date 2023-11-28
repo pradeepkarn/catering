@@ -1,9 +1,11 @@
 <?php
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
 class Events_ctrl
 {
     public $db;
@@ -53,9 +55,9 @@ class Events_ctrl
         } else {
             $event_list = $this->event_list(ord: "DESC", limit: $page_limit, active: 1);
         }
-        foreach ($event_list as $key => $ev) {
-            $this->generate_excel($ev['id']);
-        }
+        // foreach ($event_list as $key => $ev) {
+        //     $this->generate_excel($ev['id'],$month=11);
+        // }
         $context = (object) array(
             'page' => 'events/list.php',
             'data' => (object) array(
@@ -569,7 +571,7 @@ class Events_ctrl
         $cntobj = new Model('content');
         return $cntobj->filter_index(array('content_group' => 'product_category', 'is_active' => $active), $ord, $limit);
     }
-    function event_report($content_id)
+    function event_report($content_id, $month)
     {
         $db = new Dbobjects;
         $sql = "SELECT id, title, banner, managers, employees FROM content WHERE id = $content_id";
@@ -594,25 +596,25 @@ class Events_ctrl
             }
 
             // Corrected the array_map function and variable names
-            $event['managers'] = array_map(function ($mngr) use ($db) {
+            $event['managers'] = array_map(function ($mngr) use ($db, $month) {
                 $mngr['position'] = getTextFromCode($mngr['position'], POSITIONS);
-                $mngr['food_category'] = getTextFromCode(2,FOOD_CATEGORY);
-                $scandata = $this->get_emp_scandata($db, $empid = $mngr['id']);
+                $mngr['food_category'] = getTextFromCode(2, FOOD_CATEGORY);
+                $scandata = $this->get_emp_scandata($db, $empid = $mngr['id'], $month);
                 $mngr['attendence'] = array_map(function ($sd) {
                     $sd['scan_data'] = json_decode($sd['scan_data']);
-                    $sd['day'] = date("d",strtotime($sd['scan_date']));
+                    $sd['day'] = date("d", strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
                 return $mngr;
             }, $managers);
 
-            $event['employees'] = array_map(function ($emp) use ($db) {
+            $event['employees'] = array_map(function ($emp) use ($db, $month) {
                 $emp['position'] = getTextFromCode($emp['position'], POSITIONS);
-                $scandata = $this->get_emp_scandata($db, $empid = $emp['id']);
-                $emp['food_category'] = getTextFromCode(1,FOOD_CATEGORY);
+                $scandata = $this->get_emp_scandata($db, $empid = $emp['id'], $month);
+                $emp['food_category'] = getTextFromCode(1, FOOD_CATEGORY);
                 $emp['attendence'] = array_map(function ($sd) {
                     $sd['scan_data'] = json_decode($sd['scan_data']);
-                    $sd['day'] = date("d",strtotime($sd['scan_date']));
+                    $sd['day'] = date("d", strtotime($sd['scan_date']));
                     return $sd;
                 }, $scandata);
                 return $emp;
@@ -623,21 +625,21 @@ class Events_ctrl
         }
     }
 
-    function get_emp_scandata($db, $empid)
+    function get_emp_scandata($db, $empid, $month)
     {
         // $sql = "select * from qr_scan_data where user_id = '$empid'";
         $sql = "SELECT MAX(created_at) as latest_created_at, scan_date, user_id, scan_data, scan_time, scanned_by, updated_at, is_active, event_id, scan_group, food_category
         FROM qr_scan_data
-        WHERE user_id = '$empid'
+        WHERE user_id = '$empid' AND MONTH(created_at) = $month
         GROUP BY scan_date;
         ";
         return $db->show($sql);
     }
 
-    function generate_excel($event_id)
+    function generate_excel($event_id, $month)
     {
-        $event = $this->event_report($event_id);
-        
+        $event = $this->event_report($event_id, $month);
+
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->getStyle('A1:J1')->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB("D3D3D3");
@@ -708,7 +710,42 @@ class Events_ctrl
 
         // Save the Excel file
         $writer = new Xlsx($spreadsheet);
-        $writer->save(RPATH."/media/docs/event_reports/event_report_{$event_id}.xlsx");
+        // $writer->save(RPATH."/media/docs/event_reports/event_report_{$event_id}.xlsx");
+        $writer->save("php://output");
         // echo 'Excel file generated successfully.';
+    }
+    function event_report_by_month($req = null)
+    {
+        $req = obj($req);
+        $data  = $_POST;
+        $rules = [
+            'action' => 'required|string',
+            'event_id' => 'required|numeric',
+            'month' => 'required|numeric'
+        ];
+        $req = obj($data);
+        $pass = validateData(data: $data, rules: $rules);
+        if (!$pass) {
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
+        if ($req->action != 'generate_report') {
+            msg_set('Action is required');
+            $api['success'] = false;
+            $api['data'] = null;
+            $api['msg'] = msg_ssn(return: true, lnbrk: ", ");
+            echo json_encode($api);
+            exit;
+        }
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . "report" . $req->event_id . "_" . $req->month .".xlsx". '"');
+        header('Cache-Control: max-age=0');
+        $this->generate_excel($req->event_id, $req->month);
+        // echo go_to(route('eventList'));
+        return;
     }
 }

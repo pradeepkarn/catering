@@ -93,7 +93,7 @@ $active = $context->is_active;
                                     $restore_text = "Restore";
                                     $restore_link = route('eventRestore', ['id' => $pv->id]);
                                 }
-                                
+
                             ?>
 
                                 <tr>
@@ -114,10 +114,25 @@ $active = $context->is_active;
                                     <td><?php echo $pv->title; ?></td>
                                     <td><?php echo $cat_title; ?></td>
                                     <td>
-                                        <select name="month">
-                                            
-                                        </select>
-                                        <a class="btn btn-success" download href="/<?php echo MEDIA_URL."/docs/event_reports/event_report_{$pv->id}.xlsx"; ?>">Download</a>
+                                        <form action="<?php echo BASEURI.route('generateEventReportByMonth'); ?>" method="post">
+                                            <div class="d-flex gap-1">
+                                                <div>
+                                                    <select name="month" class="form-select">
+                                                        <?php
+                                                        $cm = date('m');
+                                                        foreach (MONTHS as $key => $m) : ?>
+                                                            <option <?php echo intval($m['id']) == intval($cm) ? 'selected' : null; ?> value="<?php echo $m['id']; ?>"><?php echo $m['name']; ?></option>
+                                                        <?php endforeach; ?>
+                                                    </select>
+                                                </div>
+                                                <div>
+                                                    <button type="submit" class="btn btn-primary">Generate</button>
+                                                    <input type="hidden" name="event_id" value="<?php echo $pv->id; ?>">
+                                                    <input type="hidden" name="action" value="generate_report">
+                                                    <!-- <a class="btn btn-success" download href="/<?php //echo MEDIA_URL . "/docs/event_reports/event_report_{$pv->id}.xlsx"; ?>">Download</a> -->
+                                                </div>
+                                            </div>
+                                        </form>
                                     </td>
                                     <td><?php echo $pv->status; ?></td>
                                     <td><?php echo $pv->created_at; ?></td>

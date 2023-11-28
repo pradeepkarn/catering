@@ -58,6 +58,7 @@ $admin_routes = [
     '/admin/events/delete/{id}' => 'Events_ctrl@delete_trash@name.eventDelete',
     '/admin/events/edit/{id}/save-by-ajax' => 'Events_ctrl@update@name.eventUpdateAjax',
     '/admin/events/toggle-marked-page' => 'Events_ctrl@toggle_trending@name.eventToggleMarked',
+    '/admin/events/generate-report' => 'Events_ctrl@event_report_by_month@name.generateEventReportByMonth',
     // Sliders
     '/admin/slider/create' => 'Slider_ctrl@create@name.sliderCreate',
     '/admin/slider/create/save-by-ajax' => 'Slider_ctrl@save@name.sliderStoreAjax',
