@@ -15,8 +15,7 @@ class QR_api
         $rules = [
             'token' => 'required|string',
             'event_id' => 'required|numeric',
-            'scan_group' => 'required|numeric',
-            'food_category' => 'required|numeric',
+            'scan_group' => 'required|numeric'
         ];
         $req->rescan = $req->rescan ?? 0;
         $pass = validateData(data: $data, rules: $rules);
@@ -93,7 +92,7 @@ class QR_api
             $arr['scan_time'] = date('H:i:s');
             $arr['event_id'] = $req->event_id ?? null;
             $arr['scan_data'] = json_encode($req->qrdata);
-            $arr['food_category'] = intval($req->food_category);
+            $arr['food_category'] = intval($req->food_category??1);
             $this->db->insertData = $arr;
             try {
                 if ($already_today) {

@@ -114,6 +114,9 @@ $active = $context->is_active;
                                     <td><?php echo $pv->title; ?></td>
                                     <td><?php echo $cat_title; ?></td>
                                     <td>
+                                        <select name="month">
+                                            
+                                        </select>
                                         <a class="btn btn-success" download href="/<?php echo MEDIA_URL."/docs/event_reports/event_report_{$pv->id}.xlsx"; ?>">Download</a>
                                     </td>
                                     <td><?php echo $pv->status; ?></td>
