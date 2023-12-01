@@ -42,7 +42,6 @@ function lang($dir)
 
 $home = home;
 define('RELOAD', js("location.reload();"));
-
 $acnt = new Account;
 if (isset($_COOKIE['remember_token'])) {
   $acnt->loginWithCookie($cookie = $_COOKIE['remember_token']);
